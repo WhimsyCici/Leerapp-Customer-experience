@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mijn Leerapp — Tentamenvoorbereiding</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root{
+  --cream:#FBF3EF;
+  --card:#FFFCFA;
+  --rose:#E8AEB7;
+  --rose-deep:#C97B8B;
+  --rose-dark:#A85D6E;
+  --lilac:#DCD2ED;
+  --lilac-deep:#B9A6D9;
+  --ink:#4A3B3F;
+  --ink-soft:#7A6468;
+  --gold:#D8B98A;
+  --green-ok:#8FAE8B;
+  --red-no:#C97B7B;
+  --shadow: 0 6px 20px rgba(169,110,120,0.12);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(232,174,183,0.15), transparent 40%),
+    radial-gradient(circle at 95% 85%, rgba(220,210,237,0.25), transparent 45%),
+    var(--cream);
+  color:var(--ink);
+  font-family:'Lora', serif;
+  line-height:1.6;
+  min-height:100vh;
+}
+h1,h2,h3,h4{font-family:'Playfair Display', serif; margin:0 0 0.5em 0; color:var(--rose-dark); font-weight:600;}
+.app{display:flex; min-height:100vh;}
+
+/* Sidebar */
+.sidebar{
+  width:230px; flex-shrink:0;
+  background:linear-gradient(180deg, #F6E2E6, #EFDCE9);
+  padding:28px 16px;
+  border-right:1px solid rgba(169,110,120,0.15);
+}
+.brand{font-family:'Playfair Display', serif; font-size:1.3em; color:var(--rose-dark); margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+.brand-sub{font-size:0.78em; color:var(--ink-soft); margin-bottom:28px;}
+.nav-group{margin-bottom:6px;}
+.nav-item{
+  display:flex; align-items:center; gap:8px;
+  padding:10px 12px; border-radius:12px; cursor:pointer;
+  font-size:0.95em; color:var(--ink); margin-bottom:4px;
+  transition:background 0.15s;
+}
+.nav-item:hover{background:rgba(255,255,255,0.5);}
+.nav-item.active{background:var(--card); box-shadow:var(--shadow); color:var(--rose-dark); font-weight:600;}
+.nav-sub{margin-left:14px; border-left:2px solid rgba(169,110,120,0.2); padding-left:10px;}
+.nav-sub .nav-item{font-size:0.87em; padding:7px 10px;}
+
+/* Main */
+.main{flex:1; padding:36px 44px; max-width:920px;}
+.card{
+  background:var(--card); border-radius:20px; padding:26px 30px;
+  box-shadow:var(--shadow); margin-bottom:22px;
+}
+.deco{font-size:0.95em; opacity:0.6;}
+.pill{
+  display:inline-block; padding:3px 12px; border-radius:999px;
+  background:var(--lilac); color:var(--rose-dark); font-size:0.78em; font-weight:600;
+  margin-right:6px;
+}
+.pill.gold{background:#F1E3C8; color:#8A6A2E;}
+.pill.rose{background:var(--rose); color:#fff;}
+button{
+  font-family:'Lora', serif; cursor:pointer; border:none; border-radius:12px;
+  padding:10px 20px; font-size:0.95em; background:var(--rose); color:#fff; font-weight:600;
+  box-shadow: 0 3px 10px rgba(201,123,139,0.35);
+  transition:transform 0.1s, background 0.15s;
+}
+button:hover{background:var(--rose-deep);}
+button:active{transform:scale(0.98);}
+button.secondary{background:transparent; color:var(--rose-dark); border:1.5px solid var(--rose); box-shadow:none;}
+button.secondary:hover{background:rgba(232,174,183,0.15);}
+button:disabled{opacity:0.4; cursor:not-allowed;}
+
+/* Dashboard */
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+.stat{text-align:center; padding:18px;}
+.stat .num{font-family:'Playfair Display'; font-size:2em; color:var(--rose-dark);}
+.stat .label{font-size:0.85em; color:var(--ink-soft);}
+.chapter-tile{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 20px; border-radius:16px; background:linear-gradient(120deg,#FCEEF1,#F6ECF7);
+  margin-bottom:12px; cursor:pointer; border:1px solid rgba(232,174,183,0.3);
+}
+.chapter-tile:hover{box-shadow:var(--shadow);}
+
+/* Summary content */
+.summary h4{color:var(--rose-deep); border-bottom:1.5px dashed var(--lilac-deep); padding-bottom:4px; margin-top:26px;}
+.summary p{margin:8px 0;}
+.term{color:var(--rose-dark); font-weight:600;}
+blockquote{
+  font-style:italic; border-left:3px solid var(--rose); margin:16px 0; padding:8px 18px;
+  background:rgba(232,174,183,0.08); border-radius:0 12px 12px 0; color:var(--ink-soft);
+}
+
+/* Infographic */
+.info-block{margin-bottom:34px;}
+.pyramid{display:flex; flex-direction:column; align-items:center; gap:6px; margin:20px 0;}
+.pyr-level{
+  border-radius:14px; padding:14px 20px; text-align:center; color:#fff; font-weight:600;
+  box-shadow:var(--shadow);
+}
+.pyr-level small{display:block; font-weight:400; font-size:0.8em; opacity:0.95; margin-top:2px;}
+.pyr-1{width:60%; background:linear-gradient(120deg,#C97B8B,#A85D6E);}
+.pyr-2{width:78%; background:linear-gradient(120deg,#D69AA6,#C97B8B);}
+.pyr-3{width:96%; background:linear-gradient(120deg,#E8AEB7,#D69AA6);}
+.pyr-split{display:flex; gap:6px; width:100%;}
+.pyr-split div{flex:1; border-radius:10px; padding:8px; font-size:0.82em; background:rgba(255,255,255,0.18);}
+
+.cycle{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:18px 0;}
+.cycle-step{
+  background:var(--card); border:2px solid var(--lilac); border-radius:16px;
+  padding:12px 16px; width:150px; text-align:center; font-size:0.85em; position:relative;
+}
+.cycle-step .n{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:24px; height:24px; border-radius:50%; background:var(--lilac-deep); color:#fff;
+  font-size:0.8em; margin-bottom:6px;
+}
+.arrow{align-self:center; color:var(--lilac-deep); font-size:1.3em;}
+
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:12px; margin:16px 0;}
+.def-card{background:linear-gradient(150deg,#FDF6F4,#F5EEF8); border-radius:16px; padding:14px 16px; font-size:0.87em; border:1px solid rgba(185,166,217,0.3);}
+.def-card .t{font-weight:700; color:var(--rose-dark); margin-bottom:4px; font-family:'Playfair Display';}
+
+.nps-scale{display:flex; border-radius:12px; overflow:hidden; margin:14px 0; font-size:0.82em; text-align:center; color:#fff; font-weight:600;}
+.nps-scale div{padding:10px 4px;}
+.nps-det{flex:7; background:#C97B7B;}
+.nps-pas{flex:2; background:#E0C070;}
+.nps-pro{flex:2; background:#8FAE8B;}
+
+.roadmap-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:14px 0;}
+.rm-cell{background:var(--card); border:1px solid var(--lilac); border-radius:12px; padding:8px 10px; font-size:0.8em;}
+.rm-row-label{font-weight:700; color:var(--rose-dark); font-size:0.82em; margin-top:10px;}
+
+/* Quiz */
+.progressbar{height:8px; background:#F1E4E8; border-radius:6px; overflow:hidden; margin-bottom:18px;}
+.progressbar > div{height:100%; background:linear-gradient(90deg,var(--rose),var(--lilac-deep)); border-radius:6px; transition:width 0.2s;}
+.qcounter{font-size:0.85em; color:var(--ink-soft); margin-bottom:14px;}
+.option{
+  display:block; width:100%; text-align:left; background:var(--card); border:1.5px solid var(--lilac);
+  border-radius:14px; padding:13px 16px; margin-bottom:10px; font-size:0.95em; color:var(--ink);
+  cursor:pointer; transition:border-color 0.15s, background 0.15s;
+}
+.option:hover{border-color:var(--rose);}
+.option.selected{border-color:var(--rose-deep); background:rgba(232,174,183,0.18); font-weight:600;}
+.option.correct{border-color:var(--green-ok); background:rgba(143,174,139,0.18);}
+.option.incorrect{border-color:var(--red-no); background:rgba(201,123,123,0.18);}
+.qnav{display:flex; justify-content:space-between; margin-top:20px; flex-wrap:wrap; gap:8px;}
+.qmap{display:flex; flex-wrap:wrap; gap:6px; margin:16px 0;}
+.qmap span{
+  width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+  font-size:0.75em; background:#F1E4E8; color:var(--ink-soft); cursor:pointer;
+}
+.qmap span.answered{background:var(--lilac-deep); color:#fff;}
+.qmap span.current{outline:2px solid var(--rose-deep); outline-offset:1px;}
+
+/* Results */
+.result-score{text-align:center; padding:20px;}
+.result-score .big{font-family:'Playfair Display'; font-size:3em; color:var(--rose-dark);}
+.review-item{border-left:4px solid var(--lilac-deep); padding:10px 16px; margin-bottom:12px; background:rgba(255,255,255,0.5); border-radius:0 12px 12px 0;}
+.review-item.wrong{border-left-color:var(--red-no);}
+.review-item.skipped{border-left-color:var(--gold);}
+.topic-bar-row{display:flex; align-items:center; gap:10px; margin-bottom:8px; font-size:0.85em;}
+.topic-bar-row .name{width:220px; flex-shrink:0;}
+.topic-bar-track{flex:1; height:10px; background:#F1E4E8; border-radius:6px; overflow:hidden;}
+.topic-bar-fill{height:100%; border-radius:6px;}
+
+.sparkle{position:absolute; opacity:0.5; pointer-events:none;}
+.empty-note{color:var(--ink-soft); font-style:italic; font-size:0.9em;}
+@media (max-width:760px){
+  .app{flex-direction:column;}
+  .sidebar{width:100%;}
+  .main{padding:20px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <div class="brand">✿ Mijn Leerapp</div>
+    <div class="brand-sub">Tentamenvoorbereiding</div>
+    <div id="nav"></div>
+  </div>
+  <div class="main" id="main"></div>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const chapters = [
+  {
+    id: "h2",
+    number: 2,
+    title: "Aanpak voor klantgerichtheid en customer experience",
+    summary: `
+      <blockquote>"Stop trying to delight your customers, just solve their problems." — Dixon e.a., Harvard Business Review</blockquote>
+      <p>Veel organisaties promoten actief dat ze 'de klant centraal' stellen of 'klantgericht' werken. De vraag is of dit effectief wordt aangepakt, of dat het vooral het inspelen op een trend is. Als alleen de manier verandert waarop medewerkers klanten te woord staan, terwijl klantprocessen hetzelfde blijven, voelt het voor klanten alsof alleen de buitenkant van het bedrijf is verbeterd.</p>
+      <p>Het advies uit het aangehaalde HBR-artikel: verwen klanten niet steeds met nieuwe 'spiegeltjes en kraaltjes', maar bied structurele oplossingen voor de vragen waar ze écht mee zitten. Bijvoorbeeld: een eerlijke rente in plaats van cadeautjes, flexibele onderhoudsbeurten in plaats van een bloemetje, of schade ook in twijfelgevallen oplossen in plaats van concertkaartjes geven.</p>
+
+      <h4>Mythe: we moeten klanten tevreden houden met extra's</h4>
+      <p>Bedrijven verwarren <span class="term">klantgerichtheid</span> vaak met <span class="term">klantvriendelijkheid</span> en denken dat cadeautjes en extra's hen klantgericht maken. Maar een bedrijf dat structurele problemen oplost, is pas écht vriendelijk voor zijn klanten. Dat vraagt vaak om structurele aanpassingen, zeker binnen grote organisaties.</p>
+
+      <h4>Drie stadia van klantgerichtheid (piramide)</h4>
+      <p>Klantgerichtheid is geen kwaliteit die een organisatie wel of niet heeft, maar een kwaliteit waarin een organisatie zich kan ontwikkelen en doorgroeien. Er zijn drie stadia (aangepast van Balachandran, 2007). Het heeft pas zin om een trede hoger te gaan als aan de laag eronder is voldaan.</p>
+      <p><span class="term">1. Productgericht en transactiegericht ('fix the basics' / klanttevredenheid):</span> de basis — kan het product worden gevonden en gekocht, werkt het naar behoren, kan een klant na aankoop nog contact leggen bij vragen, klachten of reparaties? Klachten gaan vaak over dit niveau. Klanten willen geen langdurige relatie aangaan als hier nog problemen zijn. Klanttevredenheid wordt hier gemeten, na aankoop van een product of dienst.</p>
+      <p><span class="term">2. Langdurige klantrelatie (klanten leren kennen / loyaliteit):</span> pas als klanttevredenheid goed is, kan gewerkt worden aan een langdurigere, loyale klantrelatie. Het bedrijf stuurt bewust op het leren kennen van klanten en hun behoeften. Loyaliteit is hier een beter meetinstrument dan klanttevredenheid alleen; klanttevredenheid én NPS zijn bruikbaar, en de ontwikkeling ervan in de tijd is belangrijker dan een losse meting.</p>
+      <p><span class="term">3. Betrokkenheid klant (co-creatie / samen met klant):</span> bij co-creatie zijn klanten écht betrokken bij innovatie en productontwikkeling — verder dan een klantenpanel waarin ze hun mening kwijt kunnen. Klanten hebben dan echt invloed op de bedrijfsvoering en denken actief mee over processen en productontwerp. Voorbeeld: bij Ziggo's CI+ hielpen de eerste gebruikers elkaar op het forum en werkten Ziggo-experts actief mee.</p>
+      <p>Nieuwe ideeën passen soms niet bij het stadium waarin een bedrijf zich bevindt (bijvoorbeeld een accountmanager die klanten uitnodigt voor een samenwerkingsvoorstel, terwijl de maandelijkse facturen nog niet foutloos binnenkomen). Zoals Dixon (2010) het formuleert: 'Loyalty has a lot more to do with how well companies deliver on their basic, even plain-vanilla promises than on how dazzling the service experience might be.'</p>
+
+      <h4>Twee strategische vraagstukken als basis</h4>
+      <p>Voordat de stappen van de customer experience-aanpak worden toegelicht, gaat het eerst om twee vraagstukken die voor elke organisatie de basis vormen:</p>
+      <p><span class="term">1. Positionering / klantstrategie:</span> welke unieke positie kiest u voor uw klanten? Wie zijn uw belangrijkste klanten, wat vinden ze van wezenlijk belang, en waarmee onderscheidt u zich? Veel organisaties willen alles aan iedereen bieden en maken geen expliciete keuzes.</p>
+      <p><span class="term">2. Klantbediening:</span> hoe geeft u invulling aan de strategische keuzes — hoe gaat u waarmaken wat u belooft, op alle touchpoints en in alle kanalen?</p>
+
+      <h4>De customer experience-aanpak: vijf stappen</h4>
+      <p>Een klantstrategie is altijd gebaseerd op een bestaande bedrijfsstrategie. Met het strategiemodel van <span class="term">Treacy en Wiersema</span> kan gekozen worden voor <span class="term">customer intimacy</span> (bekendstaan om goede service), <span class="term">product leadership</span> (de beste producten) of <span class="term">operational excellence</span> (de laagste kosten). Bij customer intimacy hoort een actievere houding naar klanten, met meer service, dan bij operational excellence.</p>
+      <p><span class="term">1. Klantinzicht</span> — wat vinden uw klanten belangrijk? Dit is de basis voor alle keuzes over klanten: welke klantgroepen zijn belangrijk, en wat vinden zij belangrijk? Bronnen: klant- en marktonderzoek, interviews, database-analyse. Maak klantgroepen expliciet met behulp van persona's.</p>
+      <p><span class="term">2. Klantstrategie bepalen met customer relevancy</span> — met het customer relevancy-model bepaalt u of u wilt excelleren in product, prijs, service, beleving of toegang, rekening houdend met de positionering van concurrenten.</p>
+      <p><span class="term">3. Proposities verbeteren en innoveren</span> — het aanbod (producten, diensten en de manier van aanbieden) moet voortdurend verbeterd en vernieuwd worden, omdat klantwensen, concurrenten en marktstandaarden veranderen.</p>
+      <p><span class="term">4. Klantbediening inrichten met customer journeys</span> — een <span class="term">customer journey</span> is een keten van klantervaringen uitgaande van één specifieke klantbehoefte (bijv. 'klant worden', 'service krijgen', 'online aankoop doen'), volledig door de ogen van de klant gezien. Het is géén proces.</p>
+      <p><span class="term">5. Touchpoints vernieuwen — digitale klantervaringen</span> — <span class="term">touchpoints</span> zijn alle contactmomenten tussen organisatie en klant (medewerkers, winkels, YouTube, Facebook, klantenservice). Alle kanalen zijn relevant omdat klanten zelf bepalen hoe ze contact leggen.</p>
+      <p>De bedrijfsstrategie is bewust als input opgenomen: nieuwe klantinzichten kunnen namelijk leiden tot een nieuwe of bijgestelde bedrijfsstrategie. In de praktijk zijn meerdere startmomenten mogelijk; organisaties moeten continu blijven vernieuwen.</p>
+
+      <h4>Waarde voor klanten = waarde voor uw organisatie</h4>
+      <p>Concrete <span class="term">klantdoelen</span> maken verbeteringen tastbaar en meetbaar. Via een <span class="term">outside-in benadering</span> sluiten verbeteringen beter aan op klanten, wat de kans op succes vergroot. Achterliggende doelstellingen van organisaties komen meestal terug op drie primaire commerciële doelen: (1) meer klanten aantrekken, (2) meer verkopen aan bestaande klanten, (3) klanten langer behouden.</p>
+      <p>Een <span class="term">benefits logic</span>-schema maakt zichtbaar hoe klantinitiatieven en nieuwe proposities via oorzaak-gevolgrelaties bijdragen aan waarde voor de organisatie (bijvoorbeeld: minder fouten → minder klachten → grotere loyaliteit → lagere servicekosten). Bij non-profit- en overheidsorganisaties ligt de uiteindelijke waarde vaker bij continuïteit of een ideële doelstelling dan bij omzet.</p>
+
+      <h4>Succes meten: klanttevredenheid en NPS</h4>
+      <p>Klanttevredenheid op een schaal laten scoren geeft een gemiddeld beeld, maar is een <span class="term">te grove maat</span> — het maakt niet duidelijk waar klantervaringen goed zijn of beter moeten. Reichheld (loyalty-expert) laat zien dat ongeveer 80% van de vertrekkende klanten aangeeft 'tevreden' te zijn geweest: tevredenheid zegt dus niet veel over loyaliteit.</p>
+      <p>De <span class="term">Net Promoter Score (NPS)</span> is een beter hulpmiddel (Reichheld, 2007). Eén vraag: 'Hoe waarschijnlijk is het dat u ons bedrijf aanbeveelt aan een vriend of collega?' Score 0–10. <span class="term">Promoters</span> (9-10) bevelen enthousiast aan, <span class="term">Passives</span> (7-8) zijn tevreden maar niet enthousiast, <span class="term">Detractors</span> (0-6) zijn ontevreden en houden groei tegen. NPS = % Promoters − % Detractors. Meet bij voorkeur op meerdere contactmomenten (bijv. vergelijken, kopen, service) in plaats van één totaalscore.</p>
+      <p>Luister niet alleen naar klagende klanten, maar juist ook naar <span class="term">superpromotors</span>: enthousiastelingen die hun enthousiasme delen of uitdragen en anderen beïnvloeden (Vogelaar, 2009), expliciet of impliciet. Dit enthousiasme zorgt voor kopieergedrag, een goede reputatie en nieuwe klanten. Voorbeelden: Apple-klanten die in de rij staan, klanten die producten actief aanprijzen, of enthousiaste eigen medewerkers.</p>
+
+      <h4>Customer experience roadmap</h4>
+      <p>Een <span class="term">customer experience roadmap</span> zet alle initiatieven op een rij die worden uitgevoerd om klantwaarde te verbeteren en de gekozen positionering te versterken, ingedeeld naar inhoudelijke onderwerpen (proposities, kanalen, sales/accountmanagement, klantenservice, website, social media, processen). Tijdshorizon: enkele maanden tot een jaar.</p>
+      <p>Aandachtspunten: (1) alleen extern gerichte initiatieven opnemen — de verandering moet zichtbaar zijn voor klanten; (2) formuleer projecten klantgericht, dus wat het de klant oplevert (bijv. niet 'verbeteren rapportage A' maar 'snelle en transparante informatie over A'); (3) effectief projectmanagement en voortgangsbewaking; (4) projectteams samenstellen met mensen van meerdere afdelingen, en de roadmap juist niet indelen naar afdelingen; (5) maak behaalde klantwaarde zichtbaar voor team en projecteigenaars.</p>
+
+      <h4>Samenvatting en advies</h4>
+      <p>Klantgerichtheid is een groeipad. De customer experience-aanpak zorgt ervoor dat klantinzicht, klantstrategie, innovaties, customer journeys en kanalen geïntegreerd worden ingezet: (1) gebruik de stappen om te zien waar verbeteringen nodig zijn; (2) onderbouw waarde met de benefits logic-aanpak; (3) neem alle verbeteringen op in één integrale customer experience roadmap.</p>
+    `,
+    infographicHtml: `
+      <div class="info-block">
+        <h4>Piramide: drie stadia van klantgerichtheid</h4>
+        <div class="pyramid">
+          <div class="pyr-level pyr-1">Betrokkenheid klant
+            <div class="pyr-split"><div>Co-creatie</div><div>Samen met klant</div></div>
+          </div>
+          <div class="pyr-level pyr-2">Langdurige klantrelatie
+            <div class="pyr-split"><div>Klanten leren kennen</div><div>Loyaliteit</div></div>
+          </div>
+          <div class="pyr-level pyr-3">Productgericht &amp; transactiegericht
+            <div class="pyr-split"><div>'Fix the basics'</div><div>Klanttevredenheid / Voor de klant</div></div>
+          </div>
+        </div>
+        <p class="deco" style="text-align:center;">↑ pas hogerop richten als de laag eronder op orde is</p>
+      </div>
+
+      <div class="info-block">
+        <h4>De customer experience-aanpak: 5 stappen (cyclisch)</h4>
+        <div class="cycle">
+          <div class="cycle-step"><div class="n">1</div>Klantinzicht — wat vinden klanten belangrijk?</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">2</div>Klantstrategie bepalen (customer relevancy)</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">3</div>Proposities verbeteren en innoveren</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">4</div>Klantbediening inrichten (customer journeys)</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">5</div>Touchpoints vernieuwen (digitaal)</div>
+          <div class="arrow">↻</div>
+        </div>
+        <p class="deco" style="text-align:center;">Basis: bedrijfsstrategie ↔ klantdoelen. Model van Treacy &amp; Wiersema: customer intimacy · product leadership · operational excellence</p>
+      </div>
+
+      <div class="info-block">
+        <h4>Kernbegrippen</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Customer journey</div>Keten van klantervaringen vanuit één klantbehoefte, door de ogen van de klant — géén proces.</div>
+          <div class="def-card"><div class="t">Touchpoints</div>Alle contactmomenten tussen organisatie en klant, in elk kanaal.</div>
+          <div class="def-card"><div class="t">Klantrelevancy-model</div>Bepaalt waarin u excelleert: product, prijs, service, beleving of toegang.</div>
+          <div class="def-card"><div class="t">Superpromotor</div>Enthousiasteling die actief aanbeveelt en anderen beïnvloedt — expliciet of impliciet.</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>NPS: Promoters — Passives — Detractors</h4>
+        <div class="nps-scale">
+          <div class="nps-det">Detractors<br>0–6</div>
+          <div class="nps-pas">Passives<br>7–8</div>
+          <div class="nps-pro">Promoters<br>9–10</div>
+        </div>
+        <p class="deco">NPS = % Promoters − % Detractors. Vraag: "Hoe waarschijnlijk is het dat u ons aanbeveelt aan een vriend of collega?"</p>
+      </div>
+
+      <div class="info-block">
+        <h4>Benefits logic — oorzaak-gevolg naar waarde</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Waarde voor klant</div>Nieuwe propositie / innovatie / nieuw kanaal</div>
+          <div class="def-card"><div class="t">Oorzaak → gevolg</div>Minder fouten → minder klachten → grotere loyaliteit</div>
+          <div class="def-card"><div class="t">Commercieel doel</div>Meer klanten aantrekken / behouden / verkopen</div>
+          <div class="def-card"><div class="t">Waarde organisatie</div>Opbrengst · lagere kosten · (ideële doelstelling bij non-profit)</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>Roadmap: onderwerpen × tijd, gericht op klantdoel</h4>
+        <p class="rm-row-label">Proposities / Marketing &amp; sales</p>
+        <div class="roadmap-grid">
+          <div class="rm-cell">Nieuwe dienst, transparante prijsopbouw</div>
+          <div class="rm-cell">Kortingssysteem, tarifering trouwe klanten</div>
+        </div>
+        <p class="rm-row-label">Klantenservice / Processen</p>
+        <div class="roadmap-grid">
+          <div class="rm-cell">Klachtenlijn, training 'persoonlijk contact'</div>
+          <div class="rm-cell">Offertetraject korter</div>
+        </div>
+        <p class="rm-row-label">Website &amp; social media</p>
+        <div class="roadmap-grid">
+          <div class="rm-cell">Landelijke bezorging, personalisatie</div>
+          <div class="rm-cell">Chatknop, redesign website</div>
+        </div>
+        <p class="deco">→ alles gericht op: ambitie en doelstellingen klanten</p>
+      </div>
+    `,
+    quiz: [
+      {q:"Wat is volgens het hoofdstuk de kern van de mythe \"we moeten klanten tevreden houden met extra's\"?", opts:["Bedrijven denken dat cadeautjes en extra's hen klantgericht maken, terwijl juist het oplossen van problemen écht klantvriendelijk is.","Bedrijven denken dat het trainen van medewerkers in vriendelijkheid altijd voldoende is om klantgericht te worden.","Bedrijven denken dat alleen kortingen geven de beste manier is om klanten tevreden en loyaal te houden."], correct:0, topic:"Mythe extra's vs. klantgerichtheid", level:"onthouden"},
+      {q:"Welke drie stadia onderscheidt de piramide van klantgerichtheid (aangepast van Balachandran)?", opts:["Klanttevredenheid meten, marketing verbeteren, en voortdurend innoveren in nieuwe producten.","Productgericht en transactiegericht, een langdurige klantrelatie, en betrokkenheid van de klant via co-creatie.","Basisvaardigheden op orde brengen, volledig digitaliseren, en loyaliteitsprogramma's invoeren voor klanten."], correct:1, topic:"Piramide klantgerichtheid", level:"onthouden"},
+      {q:"Waarom heeft het geen zin om direct te richten op co-creatie als de basisvaardigheden nog niet op orde zijn?", opts:["Omdat co-creatie wettelijk pas is toegestaan nadat een uitgebreid klanttevredenheidsonderzoek is uitgevoerd.","Omdat een trede hoger gaan in de piramide pas zin heeft als aan de laag eronder is voldaan.","Omdat co-creatie in de praktijk alleen goed werkt bij volledig digitale kanalen en diensten."], correct:1, topic:"Piramide klantgerichtheid", level:"begrijpen"},
+      {q:"Hoe wordt klanttevredenheid in het boek gemeten?", opts:["Als het totale aantal klachten dat klanten per maand indienen bij de klantenservice.","Als de totale omzet van het bedrijf gedeeld door het aantal klanten.","Als hoe klanten over het bedrijf denken, gemeten na aankoop van een product of dienst."], correct:2, topic:"Piramide klantgerichtheid", level:"onthouden"},
+      {q:"Wat is het verschil tussen activiteiten op de onderste treden van de piramide en de bovenste laag?", opts:["De onderste treden gaan over activiteiten vóór de klant, de bovenste laag over activiteiten samen met de klant.","De onderste treden gaan vooral over de inzet van online kanalen, de bovenste laag over offline kanalen.","De onderste treden gaan vooral over prijsstelling, de bovenste laag vooral over snelheid van levering."], correct:0, topic:"Piramide klantgerichtheid", level:"begrijpen"},
+      {q:"Een bedrijf nodigt klanten uit voor een samenwerkingsvoorstel, terwijl de maandelijkse facturen nog niet foutloos binnenkomen. Wat concludeert het boek hierover?", opts:["Dit is een goed en typisch voorbeeld van hoe de piramide in de praktijk werkt.","Nieuwe ideeën passen soms niet bij het stadium waarin een bedrijf zich bevindt in de interactie met klanten.","Facturatiefouten hebben volgens het boek helemaal niets te maken met klantgerichtheid of de piramide."], correct:1, topic:"Piramide klantgerichtheid", level:"toepassen"},
+      {q:"Wat is co-creatie volgens het boek?", opts:["Een klantenpanel waarin klanten alleen hun mening kwijt kunnen zonder verdere betrokkenheid.","Een kortingsprogramma dat is bedoeld om trouwe klanten te belonen met voordelen.","Klanten die echt betrokken zijn bij innovatie en productontwikkeling, verder dan alleen meningen geven."], correct:2, topic:"Piramide klantgerichtheid", level:"onthouden"},
+      {q:"Bij een kabelbedrijf hielpen klanten elkaar actief op het gebruikersforum bij het instellen van nieuwe apparatuur, en dachten klanten mee met de ontwikkelaars. Welk stadium van de piramide illustreert dit voorbeeld het best?", opts:["Het stadium 'fix the basics', waarin alleen de basisprocessen op orde worden gebracht.","Het stadium klanttevredenheid, waarin vooral gekeken wordt naar tevredenheid na aankoop.","Het stadium betrokkenheid klant, oftewel co-creatie en samenwerking met klanten."], correct:2, topic:"Piramide klantgerichtheid", level:"toepassen"},
+      {q:"Hoeveel stappen bevat de customer experience-aanpak uit figuur 3?", opts:["Drie.","Zeven.","Vijf."], correct:2, topic:"5-stappenmodel customer experience", level:"onthouden"},
+      {q:"Wat is de eerste stap van de customer experience-aanpak?", opts:["Klantinzicht: onderzoeken wat uw klanten nu eigenlijk belangrijk vinden.","Touchpoints vernieuwen, zoals de website en sociale media kanalen.","Proposities verbeteren en innoveren op basis van klantwensen."], correct:0, topic:"Klantinzicht", level:"onthouden"},
+      {q:"Waarom staat klantinzicht als eerste stap genoemd in de aanpak?", opts:["Omdat het wettelijk verplicht is om dit te doen vóór elke marketingcampagne.","Omdat klantinzicht van alle stappen het goedkoopst is om te verzamelen.","Omdat alle activiteiten in het kader van customer experience staan of vallen met klantinzicht."], correct:2, topic:"Klantinzicht", level:"begrijpen"},
+      {q:"Welke twee strategische vraagstukken vormen de basis voor elke organisatie volgens het stappenplan?", opts:["Prijsstelling bepalen en de distributiekanalen goed inrichten voor klanten.","Personeelsbeleid vaststellen en de IT-infrastructuur van het bedrijf verbeteren.","De unieke positie voor klanten kiezen en de klantbediening goed inrichten."], correct:2, topic:"5-stappenmodel customer experience", level:"onthouden"},
+      {q:"Een bedrijf wil klanten via meerdere bronnen leren kennen, zoals interviews en database-analyse. Bij welke stap van de aanpak hoort dit?", opts:["Klantinzicht, de eerste stap in de customer experience-aanpak.","Touchpoints vernieuwen, zoals bijvoorbeeld de website of sociale media.","Klantstrategie bepalen op basis van het customer relevancy-model."], correct:0, topic:"Klantinzicht", level:"toepassen"},
+      {q:"Waarmee kunt u bepalen of u wilt excelleren in product, prijs, service, beleving of toegang?", opts:["Met de zogenoemde benefits logic, die oorzaak en gevolg toont.","Met de NPS-score, die promoters en detractors met elkaar vergelijkt.","Met het customer relevancy-model, dat vijf mogelijke excellentiegebieden onderscheidt."], correct:2, topic:"Customer relevancy-model", level:"onthouden"},
+      {q:"Welke drie strategieën onderscheidt het model van Treacy en Wiersema?", opts:["Klantinzicht, klantstrategie bepalen en de klantbediening goed inrichten.","Promoters, Passives en Detractors, de drie categorieën binnen de NPS.","Customer intimacy, product leadership, en operational excellence als derde strategie."], correct:2, topic:"Treacy en Wiersema", level:"begrijpen"},
+      {q:"Een bedrijf kiest voor de strategie 'customer intimacy'. Wat betekent dit voor de houding naar klanten?", opts:["Een actievere houding naar klanten, met meer service dan bij operational excellence.","Zo min mogelijk persoonlijk contact met klanten om kosten te besparen.","Uitsluitend focussen op de laagste prijs, ongeacht de service die geleverd wordt."], correct:0, topic:"Treacy en Wiersema", level:"toepassen"},
+      {q:"Wat is volgens het boek de definitie van een customer journey?", opts:["Een intern proces binnen de organisatie dat weinig met klanten te maken heeft.","Een keten van klantervaringen vanuit één specifieke klantbehoefte, gezien door de ogen van de klant.","Een marketingcampagne die specifiek gericht is op het werven van nieuwe klanten."], correct:1, topic:"Customer journeys", level:"onthouden"},
+      {q:"Waarom is een customer journey volgens het boek géén proces?", opts:["Omdat het gaat om de activiteiten die een klant meemaakt, volledig door zijn ogen gezien.","Omdat processen volgens het boek uitsluitend intern gemeten kunnen worden door medewerkers.","Omdat customer journeys volgens het boek geen duidelijk begin of eind hebben."], correct:0, topic:"Customer journeys", level:"begrijpen"},
+      {q:"Wat zijn touchpoints?", opts:["Alleen de medewerkers die werken bij de klantenservice van een bedrijf.","Alleen de fysieke winkels en kantoren die een bedrijf ergens heeft.","Alle contactmomenten tussen de organisatie en de klant, in elk kanaal."], correct:2, topic:"Touchpoints", level:"onthouden"},
+      {q:"Wat toont een benefits logic-schema?", opts:["De financiële begroting die is opgesteld door de marketingafdeling van het bedrijf.","Hoe klantinitiatieven via oorzaak-gevolgrelaties bijdragen aan waarde voor de organisatie.","De organisatiestructuur en de afdelingen waaruit een bedrijf precies is opgebouwd."], correct:1, topic:"Benefits logic", level:"onthouden"},
+      {q:"Een non-profitorganisatie gebruikt een benefits logic-schema. Waar ligt de uiteindelijke waarde bij zo'n organisatie vaker op gericht, in plaats van op omzet?", opts:["Op continuïteit voor de organisatie of op een ideële doelstelling.","Vooral op het vergroten van de waarde voor aandeelhouders.","Vooral op het maximaliseren van de winst van het bedrijf."], correct:0, topic:"Benefits logic", level:"toepassen"},
+      {q:"Wat meet de NPS-score (Net Promoter Score)?", opts:["Het percentage Promoters minus het percentage Detractors onder klanten.","Het gemiddelde aantal aankopen dat een klant per jaar doet.","De gemiddelde levertijd van bestellingen bij het bedrijf."], correct:0, topic:"NPS en klanttevredenheid", level:"onthouden"},
+      {q:"Bij welke score op de aanbevelingsvraag horen klanten tot de 'Promoters'?", opts:["0 tot en met 6.","7 of 8.","9 of 10."], correct:2, topic:"NPS en klanttevredenheid", level:"onthouden"},
+      {q:"Waarom is klanttevredenheid volgens het boek een 'te grove maat'?", opts:["Omdat het een gemiddeld beeld geeft dat niet laat zien waar klantervaringen beter moeten.","Omdat klanttevredenheid volgens het boek nooit hoger kan scoren dan vijftig procent.","Omdat klanttevredenheid alleen op een betrouwbare manier telefonisch gemeten kan worden."], correct:0, topic:"NPS en klanttevredenheid", level:"begrijpen"},
+      {q:"Reichheld geeft aan dat ongeveer tachtig procent van de vertrekkende klanten aangeeft 'tevreden' te zijn geweest met de oude aanbieder. Wat laat dit zien?", opts:["Dat klanttevredenheid alleen van belang is voor helemaal nieuwe klanten.","Dat tevredenheid niet veel zegt over de mate van loyaliteit van klanten.","Dat vertrekkende klanten in onderzoeken bijna altijd de waarheid verdraaien."], correct:1, topic:"NPS en klanttevredenheid", level:"toepassen"},
+      {q:"Wie zijn 'superpromotors' volgens het boek?", opts:["Klanten die alleen iets kopen zodra er hoge kortingen worden aangeboden.","Enthousiastelingen die hun enthousiasme delen en anderen daarmee beïnvloeden.","Medewerkers van de klantenservice die klachten van klanten afhandelen."], correct:1, topic:"Superpromotors", level:"onthouden"},
+      {q:"Waarom is het waardevol om vooral naar superpromotors te luisteren, in plaats van alleen naar klagende klanten?", opts:["Omdat klagende klanten juridisch vaak lastiger zijn om mee om te gaan.","Omdat het enthousiasme van superpromotors zorgt voor kopieergedrag en een goede reputatie.","Omdat superpromotors van het bedrijf altijd gratis producten krijgen aangeboden."], correct:1, topic:"Superpromotors", level:"begrijpen"},
+      {q:"Wat is een customer experience roadmap?", opts:["Een overzicht van initiatieven die de waarde voor klanten verbeteren.","Een technisch schema van de volledige IT-infrastructuur van een organisatie.","Een jaarverslag dat bedoeld is voor de aandeelhouders van het bedrijf."], correct:0, topic:"Customer experience roadmap", level:"onthouden"},
+      {q:"Waarom is het belangrijk om alleen extern gerichte initiatieven in de roadmap op te nemen?", opts:["Omdat interne projecten volgens de wet nooit gerapporteerd mogen worden.","Omdat de verandering zichtbaar moet zijn voor klanten, wat de externe focus vergroot.","Omdat interne projecten volgens het boek altijd veel te duur zijn."], correct:1, topic:"Customer experience roadmap", level:"begrijpen"},
+      {q:"Een procesverbetering wordt intern omschreven als 'verbeteren rapportage A'. Hoe zou het boek adviseren dit te formuleren voor de roadmap?", opts:["Onveranderd laten, want interne beschrijvingen zijn volgens het boek het duidelijkst.","Beschrijven wat het klanten oplevert, bijvoorbeeld 'snelle en transparante informatie over A'.","Volledig verwijderen uit de roadmap, omdat het een interne procesverbetering betreft."], correct:1, topic:"Customer experience roadmap", level:"toepassen"}
+    ]
+  },
+  {
+    id: "h3",
+    number: 3,
+    title: "Klantinzicht – wat vinden uw klanten belangrijk?",
+    summary: `
+      <blockquote>"Because its purpose is to create a customer, the business has two — and only two — basic functions: marketing and innovation. Marketing and innovation produce results; all the rest are 'costs'." — Peter Drucker</blockquote>
+      <p>Weten wie je klanten zijn en wat ze belangrijk vinden lijkt triviaal, maar veel organisaties hebben hier moeite mee. Klantinzicht is stap 1 van de customer experience-aanpak. Zonder dit inzicht is het lastig om zaken te doen en klanten uitstekende ervaringen te laten opdoen. Twee redenen waarom dit lastig is: (1) medewerkers besteden te weinig tijd aan contact met klanten en zijn vooral bezig met interne processen en procedures; (2) bedrijven onderschatten hoe lastig het is om klantbehoeften goed in beeld te krijgen.</p>
+
+      <h4>Mythe: bedrijven weten wat hun klanten echt belangrijk vinden</h4>
+      <p>Succesvolle bedrijven weten wél waarom klanten zaken met hen doen en klant blijven. Dat levert waarde op: (1) als je de redenen kent, kun je klanten en vergelijkbare klanten behouden (<span class="term">retentie</span>) door de klantbediening hierop af te stemmen, in plaats van geforceerde loyaliteitssystemen zoals 'punten sparen'; (2) als je huidige klanten beter kent, is het makkelijker nieuwe klanten met een vergelijkbaar profiel aan te trekken; (3) inzicht in klantwensen vergroot de kans op succesvolle <span class="term">cross selling</span> (andere producten voorstellen) en <span class="term">deep selling</span> (bestaande producten uitbreiden) — zonder dat inzicht wordt dit al snel als platte verkoopactie gezien, mét inzicht als waardevolle hulp en advies.</p>
+
+      <h4>Van kennis over producten naar kennis over mensen</h4>
+      <p>Ga na hoe u contact legt met klanten: is de klant bekend, en is de persoon erachter bekend? Het kennen van een bedrijf betekent niet automatisch het kennen van de personen die de aankoopbeslissing nemen. <span class="term">'Kennen'</span> gaat zowel over persoonlijk kennen als over het beschikken over de juiste gegevens en wensen/voorkeuren. Ondanks jarenlange investeringen in CRM wordt klantkennis vaak niet of slecht vastgelegd.</p>
+
+      <h4>Mythe: organisaties kennen hun klanten</h4>
+      <p>Het voorbeeld van de plaatselijke groenteman versus Albert Heijn laat zien dat beide op hun eigen schaal klantkennis opbouwen: de groenteman door klanten bij naam te kennen, de supermarkt via een bonuskaart en een transactiedatabase (bijvoorbeeld om kooppatronen te herkennen of gepersonaliseerde aanbiedingen te doen via de Appie-app). Opslaan van klantgegevens is echter niet hetzelfde als 'je klanten kennen': een klant kan anoniem blijven en toch heel loyaal zijn, en correct vastgelegde gegevens worden niet automatisch ook goed gebruikt door medewerkers.</p>
+      <p>Veel bedrijven hebben hun business rondom adressen, klant- of banknummers gebouwd in plaats van rondom de personen die de aankoopbeslissing nemen (denk aan een garage die eerst naar het kenteken vraagt). Figuur 6 toont drie oplopende niveaus van klantkennis: <span class="term">(1) productgericht</span> (rekeningnummer, aansluiting, kenteken, adres — er is een productadministratie, geen klantbestand), <span class="term">(2) persoonsgericht</span> (verzekeringnemer, gezinshoofd, klant bij naam kennen), en <span class="term">(3) netwerk met personen</span> (gezin, bedrijf of vereniging met meerdere beslissers en contactpersonen — de meest complexe vorm). De stap van product/transactie naar het kennen van de persoon erachter is voor veel organisaties nog groot, en nog niet veel bedrijven kunnen goed omgaan met een heel netwerk van personen rond één klant.</p>
+
+      <h4>Klantgroepen</h4>
+      <p>Dé klant bestaat niet — toch gaan sterk productgerichte bedrijven er weleens van uit dat er één type klant is met dezelfde behoeften.</p>
+
+      <h4>Mythe: we moeten dé klant in beeld brengen</h4>
+      <p>De meeste bedrijven hebben een complexere markt die vraagt om denken in <span class="term">klantgroepen of segmenten</span>: groepen klanten die vergelijkbaar zijn in kenmerken, gedrag, profiel of klantwaarde, en die zich voldoende onderscheiden van andere groepen. Veelvoorkomende indelingen: particulier versus zakelijk, klantwaarde (topklanten versus minder omzet — 'slechte klanten' bestaan niet, want als je ze afstoot ontstaat automatisch een nieuwe groep 'slechte klanten'), grootte, leeftijdsgroepen, verkoopkanaal/kanaalvoorkeuren, lifestyle en gedrag (bijvoorbeeld <span class="term">innovators, early adopters en followers</span> bij technologie-adoptie), en klantgroepen die zichzelf vormen rond een thema of behoefte (bijvoorbeeld een online community).</p>
+      <p>Houd de indeling eenvoudig: als een groep niet apart te benaderen, mailen of vinden is in de markt, heeft de indeling weinig toegevoegde waarde. Een goed voorbeeld van gericht inspelen op één klantgroep is Agis Zorgverzekeringen, dat via het jongerenmerk Take Care Now specifiek op jongeren inspeelt met gerichte communicatie, sociale media en acties. Dé klant bestaat niet, maar dat betekent niet dat alle klanten uniek zijn: er zijn altijd overeenkomsten te vinden in de klantbediening. Het belangrijkst is dat u klantgroepen zo kiest dat u ze kunt gebruiken om klantervaringen op aan te passen.</p>
+
+      <h4>Persona's</h4>
+      <p>Zodra klantgroepen zijn gekozen, kunnen deze vertaald worden naar <span class="term">persona's</span>: beeldende beschrijvingen van de kenmerken, behoeften en het gedrag van een klantgroep — in wezen fictieve klanten, getypeerd met kenmerken als leeftijd, geslacht, gedrag, beroep, vrijetijdsbesteding en voorkeuren, vaak met een naam en foto.</p>
+      <p>Persona's dragen bij aan: aanpassing aan verschillende typen klanten (beter inspelen op customer journeys, proposities en kanalen), klantgerichtheid bij medewerkers (concreter beeld van klanten met een naam in plaats van abstracte klanten), communicatie over klanten (bijvoorbeeld 'maken we dit voor Jan of voor Astrid?') en betere verplaatsing in klantwensen.</p>
+      <p>Voorbeeld in het boek: bij het ontwikkelen van een nieuwe onlinedienst voor woningreparaties zijn twee persona's gebruikt — <span class="term">Astrid</span> (36 jaar, drukke zelfstandig financieel adviseur, wil vooral flexibiliteit bij het inplannen en een korte wachttijd) en <span class="term">Jan</span> (70 jaar, gepensioneerd, wil vooral hulp bij het uitkiezen van een betrouwbare leverancier). Beide persona's vertegenwoordigen heel verschillende wensen en gedrag, wat ruimte geeft voor creativiteit bij het ontwerpen van de dienst.</p>
+
+      <h4>Dag in het leven van...</h4>
+      <p>Naast persona's kan het gedrag van een klantgroep verdiept worden met een <span class="term">'dag in het leven van...'</span>-beschrijving: een levendige beschrijving van wat een klant op een (of meerdere) dag(en) meemaakt, met nadruk op gedrag, kanaalgebruik en activiteiten. Dit is nodig omdat persona's alleen niet genoeg zijn om concrete vernieuwingen te bedenken. Het boek geeft als voorbeeld een dag uit het leven van persona Astrid, waarin ze onderweg via Twitter met haar energieleverancier in contact komt, tussen klantgesprekken door belt en 's avonds nog haar eigen bankzaken regelt.</p>
+
+      <h4>Mythe: we moeten aan de klant gaan vragen wat hij wil</h4>
+      <p>Er zijn <span class="term">expliciete klantbehoeften</span> (ook wel manifeste behoeften): deze kan de klant zelf goed verwoorden, bijvoorbeeld 'ik wil snel geholpen worden' of 'ik wil een lage prijs'. Daarnaast zijn er <span class="term">latente behoeften</span>: wel aanwezig, maar onbewust — klantbehoeften waarvan klanten nog niet weten dat ze hun gedrag gaan bepalen. Latente behoeften worden pas echt duidelijk als een klant praktijkervaring opdoet met een product of dienst. Bij de meeste innovaties van de afgelopen jaren konden klanten vooraf niet aangeven dat ze het nodig hadden, maar konden ze toch een succes worden door goed op deze latente behoeften in te spelen. Er is niet één manier om zowel expliciete als latente klantbehoeften in beeld te krijgen; het best werkt een combinatie van werkwijzen.</p>
+
+      <h4>Voice of the customer: dertien manieren om klanten te leren kennen</h4>
+      <p>Het boek noemt dertien technieken om de <span class="term">voice of the customer</span> in beeld te brengen en zo outside-in te leren denken in plaats van inside-out:</p>
+      <p><span class="term">1. Klantfocussessies</span> (customer engagement) — intern, dwars door de organisatie, met vragen als 'welke relaties willen we met klanten hebben?'. Nadeel: klanten zelf zijn er niet bij betrokken.<br>
+      <span class="term">2. Haal een klant naar binnen</span> bij workshops of overleg, en laat hem meepraten over verbeteringen.<br>
+      <span class="term">3. Richt een klantenpanel in</span> — een grotere groep klanten die (eenmalig of vast) meedenkt, offline of online (zoals HEMA via Facebook, ING met stellingen op de website, of Dell's Idea Storm Platform waar klanten verbeteringen voorstellen en erop kunnen stemmen).<br>
+      <span class="term">4. Diepte-interviews</span> met individuele klanten over situatie, achtergrond, motivatie en gedrag.<br>
+      <span class="term">5. Ga naar klanten toe</span>, bijvoorbeeld in hun woon- of werkomgeving, om te zien hoe een product daadwerkelijk wordt gebruikt.<br>
+      <span class="term">6. Word klant bij uw eigen bedrijf</span> (mystery shopper): zelf anoniem aankopen doen om het hele klantproces te doorlopen.<br>
+      <span class="term">7. Luister mee in kanalen</span>, bijvoorbeeld bij de klantenservice of het callcenter.<br>
+      <span class="term">8. Bekijk de klanten van de concurrent</span>: waarom kiezen zij daarvoor?<br>
+      <span class="term">9. Creëer een prototype</span> en leg dit voor aan klanten, bijvoorbeeld via usability tests.<br>
+      <span class="term">10. Doe praktijkervaring op in pilots</span>: een praktijktest in de eigen omgeving van de klant (in tegenstelling tot een prototype in een laboratoriumomgeving).<br>
+      <span class="term">11. Customer intelligence</span>: het slim analyseren van de eigen klanten- en transactiedatabase. Dit geeft alleen inzicht in huidige klanten, niet in toekomstige gewenste klanten.<br>
+      <span class="term">12. Marktonderzoek</span>, bijvoorbeeld onder een onafhankelijk consumentenpanel — waardevol, maar meer onderzoek leidt niet automatisch tot meer inzicht.</p>
+
+      <h4>Mythe: met meer klantonderzoek weten we beter hoe we op klanten moeten inspelen</h4>
+      <p><span class="term">13. Digital intelligence & social media-monitoring</span>: klanten volgen op sociale media met speciale software en gekozen zoektermen, wat kan uitgroeien tot een <span class="term">social listening center</span> dat digitaal klantbehoeften (en reacties op storingen of klachten) in beeld brengt.</p>
+
+      <h4>Samenvatting en advies</h4>
+      <p>Klanten zijn nog te vaak nummers in plaats van personen. Leer de personen kennen, hun klantbehoeften en wat zij écht belangrijk vinden, met behulp van meerdere outside-in-technieken: (1) gebruik meerdere technieken om de voice of the customer te achterhalen, (2) benut de inzichten om klantbehoeften op een rij te krijgen en te bepalen wat klanten het belangrijkst vinden, (3) creëer persona's die klanten en hun behoeften uitbeelden.</p>
+    `,
+    infographicHtml: `
+      <div class="info-block">
+        <h4>Van kennis over producten naar kennis over mensen (figuur 6)</h4>
+        <div class="pyramid">
+          <div class="pyr-level pyr-1">Netwerk met personen
+            <div class="pyr-split"><div>Gezin</div><div>Bedrijf</div><div>Vereniging</div></div>
+          </div>
+          <div class="pyr-level pyr-2">Persoonsgericht
+            <div class="pyr-split"><div>Verzekeringnemer</div><div>Gezinshoofd</div><div>Klant bij naam kennen</div></div>
+          </div>
+          <div class="pyr-level pyr-3">Productgericht
+            <div class="pyr-split"><div>Rekeningnummer</div><div>Aansluiting</div><div>Kenteken / Adres</div></div>
+          </div>
+        </div>
+        <p class="deco" style="text-align:center;">↑ toenemende complexiteit van klantkennis</p>
+      </div>
+
+      <div class="info-block">
+        <h4>Klantgroep-indelingen die vaak voorkomen</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Particulier vs. zakelijk</div>Bijv. bij financiële dienstverleners: andere producten en klantbediening.</div>
+          <div class="def-card"><div class="t">Klantwaarde</div>Topklanten vs. minder omzet — 'slechte klanten' bestaan niet als aparte groep.</div>
+          <div class="def-card"><div class="t">Grootte</div>Groot bedrijf vraagt andere dienstverlening dan een eenmanszaak.</div>
+          <div class="def-card"><div class="t">Leeftijdsgroepen</div>Jongeren, ouderen, gepensioneerden, studenten.</div>
+          <div class="def-card"><div class="t">Kanaalvoorkeuren</div>Klanten die via winkels kopen vs. online kopers.</div>
+          <div class="def-card"><div class="t">Lifestyle &amp; gedrag</div>Innovators — early adopters — followers.</div>
+          <div class="def-card"><div class="t">Thema of behoefte</div>Klantgroepen die zichzelf vormen, bijv. een online community.</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>Twee voorbeeldpersona's</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Astrid — 36 jaar, ondernemer</div>Zelfstandig financieel adviseur, druk, veel onderweg. Wenst: flexibiliteit bij inplannen, korte wachttijd, uitbesteden van klussen.</div>
+          <div class="def-card"><div class="t">Jan — 70 jaar, gepensioneerd</div>Sociale academie, veel tijd maar 'twee linkerhanden'. Wenst: hulp bij kiezen van leverancier, betrouwbare kwaliteit.</div>
+        </div>
+        <p class="deco">Zelfde dienst, twee heel verschillende klanttypen — allebei relevant voor het ontwerp.</p>
+      </div>
+
+      <div class="info-block">
+        <h4>Klantbehoeften: expliciet vs. latent</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Expliciet (manifest)</div>Kan de klant zelf verwoorden: "ik wil snel geholpen worden", "ik wil een lage prijs".</div>
+          <div class="def-card"><div class="t">Latent</div>Onbewust aanwezig, wordt pas duidelijk bij praktijkervaring: behoefte aan erkenning, gemak, mooier design.</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>13 manieren om de voice of the customer te horen</h4>
+        <div class="cycle" style="justify-content:flex-start;">
+          <div class="cycle-step"><div class="n">1</div>Klantfocussessies</div>
+          <div class="cycle-step"><div class="n">2</div>Klant naar binnen halen</div>
+          <div class="cycle-step"><div class="n">3</div>Klantenpanel</div>
+          <div class="cycle-step"><div class="n">4</div>Diepte-interviews</div>
+          <div class="cycle-step"><div class="n">5</div>Naar klanten toe gaan</div>
+          <div class="cycle-step"><div class="n">6</div>Mystery shopper</div>
+          <div class="cycle-step"><div class="n">7</div>Meeluisteren in kanalen</div>
+          <div class="cycle-step"><div class="n">8</div>Klanten van concurrent</div>
+          <div class="cycle-step"><div class="n">9</div>Prototype</div>
+          <div class="cycle-step"><div class="n">10</div>Pilot</div>
+          <div class="cycle-step"><div class="n">11</div>Customer intelligence</div>
+          <div class="cycle-step"><div class="n">12</div>Marktonderzoek</div>
+          <div class="cycle-step"><div class="n">13</div>Digital intelligence &amp; social monitoring</div>
+        </div>
+      </div>
+    `,
+    quiz: [
+      {q:"Waarom is het volgens het boek voor veel bedrijven lastig om te weten wat klanten écht belangrijk vinden?", opts:["Omdat klanten hun mening volgens het boek nooit met een bedrijf willen delen.","Omdat marktonderzoek volgens het boek aan zeer strenge wettelijke regels gebonden is.","Omdat medewerkers te weinig tijd in klantcontact steken en de moeite om klantbehoeften te achterhalen onderschatten."], correct:2, topic:"Klantinzicht - basis", level:"onthouden"},
+      {q:"Wat is de meest complexe vorm van klantkennis volgens figuur 6 (Van kennis over producten naar kennis over mensen)?", opts:["Productgericht: klantgegevens op het niveau van rekeningnummer of kenteken.","Persoonsgericht: klanten worden bij hun eigen naam gekend.","Netwerk met personen: een heel gezin, bedrijf of vereniging."], correct:2, topic:"Klantkennis-niveaus", level:"onthouden"},
+      {q:"Wat bedoelt het boek met 'productgerichte' klantkennis?", opts:["Klantgegevens liggen vast op productniveau, er is eerder een productadministratie dan een klantbestand.","Bedrijven kennen in dit geval al hun klanten persoonlijk bij naam.","Klanten worden ingedeeld naar het merk dat zij het vaakst kopen."], correct:0, topic:"Klantkennis-niveaus", level:"begrijpen"},
+      {q:"Een garage vraagt bij binnenkomst eerst naar uw kenteken in plaats van uw naam. Welk niveau van klantkennis illustreert dit?", opts:["Het niveau netwerk met personen.","Het niveau productgericht klantkennis.","Het niveau persoonsgericht klantkennis."], correct:1, topic:"Klantkennis-niveaus", level:"toepassen"},
+      {q:"Wat kun je doen als je weet waarom klanten zaken met je doen (retentie)?", opts:["Meteen de prijzen fors verlagen voor al uw klanten.","Alle klantendata direct verwijderen vanwege privacyoverwegingen.","De klantbediening hierop afstemmen, in plaats van geforceerde loyaliteitssystemen."], correct:2, topic:"Klantinzicht - basis", level:"onthouden"},
+      {q:"Waarom wordt cross selling of deep selling door klanten sneller als 'platte verkoopactie' gezien?", opts:["Omdat het bij cross selling altijd om erg dure producten gaat.","Omdat cross selling zonder toestemming van de klant wettelijk verboden is.","Als er geen inzicht is in de klantwensen, in plaats van als hulp en advies met dat inzicht."], correct:2, topic:"Klantinzicht - basis", level:"begrijpen"},
+      {q:"Een lokale winkelier kent klanten vooral persoonlijk bij naam, terwijl een grote supermarktketen klanten vooral kent via een bonuskaart en een transactiedatabase. Wat laat dit voorbeeld zien?", opts:["...alleen kleine, lokale winkeliers in staat zijn hun klanten goed te kennen.","...beide op hun eigen schaal klantkennis opbouwen, maar op verschillende manieren.","...grote supermarktketens helemaal geen klantgegevens verzamelen of gebruiken."], correct:1, topic:"Klantkennis-niveaus", level:"toepassen"},
+      {q:"Waarom is het opslaan van klantgegevens volgens het boek niet hetzelfde als 'je klanten kennen'?", opts:["Omdat het opslaan van klantgegevens wettelijk helemaal niet is toegestaan.","Omdat klantendatabases altijd binnen één jaar volledig verouderd raken.","Omdat klanten anoniem kunnen blijven en toch loyaal zijn, en vastgelegde gegevens niet altijd goed gebruikt worden."], correct:2, topic:"Klantkennis-niveaus", level:"begrijpen"},
+      {q:"Wat is een risico dat het boek noemt bij bedrijven die alleen online leveren?", opts:["Ze hebben volgens het boek nooit toegang tot klantgegevens.","Ze kunnen volgens het boek geen marktonderzoek meer doen.","Het ontstaan van 'dubbele klanten' onder verschillende namen of mailadressen."], correct:2, topic:"Klantkennis-niveaus", level:"onthouden"},
+      {q:"Wat is volgens het boek de belangrijkste reden om klanten als groep (klantgroep/segment) te zien?", opts:["Omdat ze toevallig allemaal in dezelfde stad wonen.","Omdat het bedrijf klanten willekeurig in groepen heeft ingedeeld.","Omdat ze gelijksoortige kenmerken hebben of vergelijkbaar gedrag vertonen."], correct:2, topic:"Klantgroepen", level:"onthouden"},
+      {q:"Waarom bestaan 'slechte klanten' volgens het boek niet echt?", opts:["Omdat volgens het boek alle klanten evenveel omzet genereren.","Omdat klantwaarde volgens het boek helemaal niet te meten is.","Omdat het afstoten van klanten met lage waarde automatisch een nieuwe groep 'slechte klanten' oplevert."], correct:2, topic:"Klantgroepen", level:"begrijpen"},
+      {q:"Een bedrijf wil een nieuw product richten op 'alle Nederlanders tussen 40 en 50 die van design en teakhout houden'. Wat is hier volgens het boek het probleem mee?", opts:["Zo'n groep is niet concreet te vinden of te benaderen in de markt.","Deze groep is volgens het boek te groot om ooit klant te worden.","Deze indeling is juist een goed voorbeeld van een bruikbare klantgroep."], correct:0, topic:"Klantgroepen", level:"toepassen"},
+      {q:"Welke indeling wordt in het boek genoemd op basis van de snelheid waarmee consumenten nieuwe technologie adopteren?", opts:["Particuliere klanten versus zakelijke klanten.","Innovators, early adopters en followers van nieuwe technologie.","Klantwaarde en het marktaandeel van klanten."], correct:1, topic:"Klantgroepen", level:"onthouden"},
+      {q:"Waarom heeft een klantgroepindeling weinig toegevoegde waarde als het aanbod niet meer te verbijzonderen is voor die groep?", opts:["Omdat je de groep dan niet apart kunt benaderen of vinden in de markt.","Omdat de groep dan vanzelf veel te klein wordt.","Omdat verbijzondering van het aanbod wettelijk verplicht zou zijn."], correct:0, topic:"Klantgroepen", level:"begrijpen"},
+      {q:"Wat is een persona volgens het boek?", opts:["Een juridisch document waarin de rechten van klanten staan.","Een beeldende beschrijving van kenmerken, behoeften en gedrag van een klantgroep.","Een technische specificatie van een geautomatiseerd IT-systeem."], correct:1, topic:"Persona's", level:"onthouden"},
+      {q:"Waarom worden persona's ingezet bij customer experience-projecten?", opts:["Omdat ze klanten persoonlijk, tastbaar en levensecht maken voor teams.","Omdat het gebruik van persona's wettelijk verplicht is gesteld.","Omdat persona's volgens het boek automatisch de omzet verhogen."], correct:0, topic:"Persona's", level:"begrijpen"},
+      {q:"In het voorbeeld van de nieuwe gemaksdienst voor woningreparaties zijn de persona's Astrid en Jan gekozen. Wat is de belangrijkste reden om beide persona's te gebruiken bij het ontwerpen van de dienst?", opts:["Ze vertegenwoordigen twee heel verschillende typen potentiële klanten met andere wensen en gedrag.","Astrid en Jan zijn de enige twee klanten die ooit voor het boek zijn geïnterviewd.","Persona's zijn volgens het boek alleen bedoeld voor de marketingafdeling."], correct:0, topic:"Persona's", level:"toepassen"},
+      {q:"Welke kenmerken worden gebruikt om een persona te typeren, volgens het boek?", opts:["Alleen het inkomen en de woonplaats van de klant.","Leeftijd, geslacht, gedrag, beroep, vrijetijdsbesteding en voorkeuren van de klant.","Uitsluitend het aankoopkanaal dat de klant het vaakst gebruikt."], correct:1, topic:"Persona's", level:"onthouden"},
+      {q:"Waarom wordt een 'dag in het leven van...'-beschrijving toegevoegd naast persona's?", opts:["Omdat dit wettelijk verplicht is gesteld bij marktonderzoek.","Omdat het maken van persona's op zichzelf al te duur is.","Omdat persona's alleen niet genoeg zijn: gedrag en kanaalgebruik worden pas zichtbaar via 'de dag'."], correct:2, topic:"Dag in het leven van", level:"onthouden"},
+      {q:"Wat is het verschil tussen expliciete en latente klantbehoeften?", opts:["Expliciete behoeften zijn duurder om als bedrijf te vervullen.","Expliciete behoeften kan de klant zelf verwoorden, latente behoeften zijn onbewust.","Latente behoeften komen volgens het boek alleen bij zakelijke klanten voor."], correct:1, topic:"Klantbehoeften", level:"onthouden"},
+      {q:"Waarom is het volgens het boek een misvatting om te denken dat je alle marketingvragen beantwoord krijgt door klanten rechtstreeks te vragen wat ze willen?", opts:["Omdat klanten volgens het boek altijd liegen in enquêtes.","Omdat een deel van de klantbehoeften latent is en klanten dit zelf niet kunnen benoemen.","Omdat klanten wettelijk gezien niet verplicht zijn om te antwoorden."], correct:1, topic:"Klantbehoeften", level:"begrijpen"},
+      {q:"Bij de meeste innovaties van de afgelopen jaren konden klanten vooraf niet aangeven dat ze het product nodig hadden. Waar verwijst dit naar?", opts:["Expliciete behoeften die klanten van tevoren al hadden benoemd.","Klantwaarde die bij het bedrijf al vooraf bekend was.","Latente behoeften, die pas duidelijk worden bij praktijkervaring met het product."], correct:2, topic:"Klantbehoeften", level:"toepassen"},
+      {q:"Wat is een nadeel van klantfocussessies (customer engagement) zoals genoemd in het boek?", opts:["Ze zijn volgens het boek te duur om te organiseren.","De klanten zelf zijn bij deze sessies niet betrokken.","Ze mogen niet dwars door de organisatie heen georganiseerd worden."], correct:1, topic:"Voice of the customer-technieken", level:"onthouden"},
+      {q:"Bij een technologiebedrijf kunnen klanten online verbeteringen en wensen voor producten doorgeven, waarna andere klanten daarop kunnen stemmen. Welke voice of the customer-techniek is dit?", opts:["Een klantenpanel waarbij klanten online ideeën doorgeven en erop kunnen stemmen.","Een mystery shopper-programma waarbij medewerkers anoniem inkopen doen.","Een marktonderzoek dat wordt uitgezet onder een onafhankelijk consumentenpanel."], correct:0, topic:"Voice of the customer-technieken", level:"toepassen"},
+      {q:"Wat is het verschil tussen een prototype en een pilot volgens het boek?", opts:["Er is volgens het boek geen enkel verschil tussen beide technieken.","Een prototype wordt getest in een lab, een pilot juist in de praktijk van de klant.","Een pilot is volgens het boek altijd goedkoper dan een prototype."], correct:1, topic:"Voice of the customer-technieken", level:"begrijpen"},
+      {q:"Een bank laat medewerkers meeluisteren in het callcenter om te horen hoe klanten de bank benaderen. Welke voice of the customer-techniek is dit?", opts:["Luister mee in de klantcontact-kanalen.","Bekijk de klanten van de belangrijkste concurrent.","Creëer een prototype van een nieuw product."], correct:0, topic:"Voice of the customer-technieken", level:"toepassen"},
+      {q:"Wat kan customer intelligence (het analyseren van klanten- en transactiedatabases) volgens het boek onder andere inzicht geven in?", opts:["De politieke voorkeur en het stemgedrag van klanten.","Wie de beste klanten zijn en hoe transacties en producten samenhangen.","De toekomstige wetgeving die in de sector gaat gelden."], correct:1, topic:"Customer intelligence & marktonderzoek", level:"onthouden"},
+      {q:"Waarom geeft de eigen klantendatabase volgens het boek geen inzicht in toekomstige gewenste klanten?", opts:["Omdat de database alleen gegevens over de huidige klanten bevat.","Omdat databases volgens het boek nooit up-to-date te houden zijn.","Omdat customer intelligence wettelijk gezien sterk beperkt zou zijn."], correct:0, topic:"Customer intelligence & marktonderzoek", level:"begrijpen"},
+      {q:"Bij één bedrijf lag een stapel van 50 centimeter aan marktonderzoeksrapporten, maar niemand kon er nog zinvolle conclusies uit trekken. Wat wordt hiermee geïllustreerd?", opts:["Dat meer onderzoek niet automatisch tot meer inzicht leidt als onderzoeken elkaar tegenspreken.","Dat marktonderzoek volgens het boek altijd tot dezelfde conclusies leidt.","Dat marktonderzoek nooit door een extern bureau uitgevoerd zou moeten worden."], correct:0, topic:"Customer intelligence & marktonderzoek", level:"toepassen"},
+      {q:"Wat ontstaat er als bedrijven op een gestructureerde manier sociale media volgen op zoektermen zoals de bedrijfsnaam?", opts:["Een social listening center dat klantbehoeften digitaal in beeld brengt.","Een klantenpanel van tientallen betrokken klanten.","Een customer relevancy-model voor positionering."], correct:0, topic:"Digital intelligence & social media", level:"onthouden"}
+    ]
+  },
+  {
+    id: "h4",
+    number: 4,
+    title: "Klantstrategie bepalen met customer relevancy",
+    summary: `
+      <blockquote>"Human values, not commercial value, have become the contemporary currency of commerce." — Crawford and Mathews</blockquote>
+      <p>Het klantinzicht dat u hebt opgebouwd, kunt u gebruiken om een helder aanbod te bieden en een scherpe merkpositionering op te bouwen. Waarom kiezen klanten uw bedrijf? Het belangrijkst is of uw bedrijf een positie heeft ingenomen die <span class="term">herkenbaar, waardevol en onderscheidend</span> is ten opzichte van concurrenten. Daarvoor moet u goed inspelen op wat uw klanten belangrijk vinden én op datgene waar uw bedrijf goed in is.</p>
+
+      <h4>Customer relevancy: vijf attributen</h4>
+      <p><span class="term">Customer relevancy (CR)</span> is een strategisch hulpmiddel om die positionering te bepalen. CR gaat over vijf attributen: <span class="term">product, prijs, service, toegang en beleving</span> (Crawford & Mathews, 2003). Dit zijn de elementen waarmee klanten voor uw bedrijf kiezen en niet voor de concurrent. Ze kwamen naar voren uit onderzoek onder duizenden retailklanten in de Verenigde Staten naar de manier waarop zij hun retailer kozen; deze vijf aspecten speelden daarbij een cruciale rol, en voor Europa golden dezelfde conclusies. De attributen zijn bewezen toepasbaar in de consumentensector, de dienstensector, de zakelijke markt, bij online winkelen en bij digitaal (mobiel) koopgedrag. Het hulpmiddel heette oorspronkelijk <span class="term">consumer relevancy</span>, maar is door de inzet in de zakelijke markt aangepast naar customer relevancy.</p>
+      <p>Customer relevancy geeft concrete invulling aan uw klantstrategie: het dwingt u om keuzes te maken over waar u écht goed in wilt zijn (alles tegelijk is geen goede keuze), het biedt houvast bij strategische workshops, interviews en het onderzoeken van klantervaringen, het draait om het maken van keuzes in positionering (beoordeeld door mensen, zowel als consument (B2C) als in een zakelijke rol (B2B)), en het helpt om na te denken over customer experience en digitale klantervaringen.</p>
+
+      <h4>Focus voor uw klanten</h4>
+      <p>De vijf attributen zijn een instrument om klantbehoeften (opgehaald met de technieken uit het vorige hoofdstuk) te vertalen naar keuzes waar u als bedrijf goed in wilt zijn. Door de voice of the customer te verwoorden met zinnen als <span class="term">'Ik wil...'</span> — alsof een klant het uitspreekt — wordt iedereen in het bedrijf gedwongen zich voortdurend in de klant te verplaatsen. Zo kan 'meer inzicht in tarieven' bijvoorbeeld 'ik wil inzicht in de opbouw van tarieven' betekenen, óf gewoon 'ik wil lage prijzen' — verschillende dingen die van heel verschillende klanten afkomstig kunnen zijn.</p>
+
+      <h4>1. Product</h4>
+      <p>Dit attribuut staat voor het product of de dienst waarvoor klanten naar uw bedrijf komen — fysiek (auto, koffie, tablet) of een dienst (spaarrekening, advies, verzekering) — plus kenmerken als kwaliteit, eigenschappen en mogelijkheden. Producten die uniek zijn in hun markt trekken daardoor klanten aan (bijvoorbeeld de Toyota Prius als eerste hybride auto, de iPhone als eerste smartphone, IKEA-meubels die niemand anders maakt) — vaak zijn dit trendsetters. Het beste product leveren betekent niet automatisch dat klanten daarvoor komen: veel consumenten vinden een consistente kwaliteit belangrijker dan de meest uitgebreide opties, en aspecten als uitbreidbaarheid, toekomstvastheid en betrouwbaarheid spelen ook een rol. Als producten sterk op elkaar gaan lijken of zelfs 'commodity' worden, neemt de invloed van dit attribuut af. Bij fysieke producten is doorgaans duidelijk wat 'product' is en wat 'service'; bij diensten bepaalt de klant zelf waar die grens ligt.</p>
+      <p>Voorbeelden van klantbehoeften bij dit attribuut: een hoge productkwaliteit, de beste producten, uitgebreide productkenmerken, een mooi design, een uniek product, een product dat uit te breiden is, een 'toekomstvast' en betrouwbaar product, consistente kwaliteit, innovatieve producten, een lange levensduur, en een echte expert die de dienst uitvoert.</p>
+
+      <h4>2. Prijs</h4>
+      <p>Dit attribuut omvat alles wat met de prijs van geleverde producten en diensten te maken heeft: de hoogte, maar ook transparantie, betrouwbaarheid van prijs en tarieven, en het afrekenmodel. Klanten vinden de hoogte van de prijs en korting belangrijk, maar hechten ook aan consistentie (de prijs verandert niet zonder reden) en een logische, navolgbare opbouw. Sommige producten worden juist gekocht omdat de prijs hoog is (dure horloges, luxe auto's) — de prijs is dan een middel om je te onderscheiden. Een goed voorbeeld van veranderend klantgedrag en aanbod op dit vlak is de afrekening van mobiele abonnementen: van een vast bedrag, via sms-bundels en prepaid, tot datagebruik als centrale factor — klanten zoeken niet de goedkoopste aanbieder, maar een tarifering die bij hun eigen gebruik past.</p>
+      <p>Voorbeelden van klantbehoeften bij dit attribuut: scherpe tarieven, inzicht in de opbouw van de prijs, transparante en eerlijke prijzen, de laagste prijs, consistente prijzen, een hoge rente of rendement, flexibele of modulaire prijzen, en de beste korting.</p>
+
+      <h4>3. Service</h4>
+      <p>Service gaat om alle dienstverlening en begeleiding die klanten kunnen krijgen als toevoeging op het basisproduct of de basisdienst, zoals informatie over nieuwe ontwikkelingen, snelle en vakkundige antwoorden, klachtenafhandeling en extra serviceverlening. In de dienstensector zit er een knip tussen de dienst zelf (bijvoorbeeld een verzekering) en de service die een klant daarbij krijgt (bijvoorbeeld uitleg over voorwaarden). Service gaat niet alleen om contact ná de koop, maar ook vooraf, zoals het aanpassen en op maat maken van producten.</p>
+      <p>Voorbeelden van klantbehoeften bij dit attribuut: deskundige medewerkers en adviseurs, consistente dienstverlening op alle contactmomenten, advies op maat, selfservicemogelijkheden, snelle oplossing van klachten, en proactief meedenken met de situatie van de klant.</p>
+
+      <h4>4. Toegang</h4>
+      <p>Toegang of toegankelijkheid gaat over de manier waarop product, dienst en service kunnen worden verkregen: op welke plaats, op welke tijd en via welk kanaal of medium (winkels, kantoren, online, mobiel, sociale media). Door digitale mogelijkheden zijn er veel nieuwe kansen voor klantcontact ontstaan, maar klanten stellen ook hoge eisen aan online toegang, zoals gemakkelijk gevonden worden en heldere informatie over producten en voorwaarden.</p>
+      <p>Voorbeelden van klantbehoeften bij dit attribuut: een winkel of kantoor in de buurt, gemakkelijk contact kunnen opnemen, alles online kunnen kopen, bereikbare adviseurs (ook buiten kantoortijden), een heldere website, en apps met directe toegang tot relevante informatie en transacties.</p>
+
+      <h4>5. Beleving</h4>
+      <p>Beleving omvat de relatie, betrokkenheid en binding van de klant met het bedrijf en de merknaam — de emotie van klanten: wat spreekt hen aan in het merk, de producten en de diensten, en wordt de klant als mens aangesproken? Het gaat om de beleving van de merknaam, de historie van het bedrijf, betrouwbaarheid en de lifestyle die het bedrijf uitstraalt. Dit raakt klanten dieper dan wat mogelijk is met reclame: reclamecampagnes spreken klanten qua beleving aan, maar raken hen niet noodzakelijk in hun overtuigingen en waarden. Denk aan de verschillen tussen merken in mode, sport en auto's (Adidas of Nike, Audi of Peugeot) — ook bij vergelijkbare producten speelt beleving een grote rol.</p>
+      <p>Voorbeelden van klantbehoeften bij dit attribuut: een merknaam die ik vertrouw, als mens behandeld en persoonlijk herkend worden, vooroplopen met de nieuwste producten, deel uitmaken van een exclusieve groep klanten, een bedrijf dat bij mijn lifestyle past, en een merk dat 'hip' of juist degelijk is.</p>
+
+      <h4>Het customer relevancy-model: niveaus</h4>
+      <p>Met de vijf attributen vertaalt u outside-in gevonden klantbehoeften naar de aspecten die het meest doorslaggevend zijn in de keuze voor uw bedrijf. Het principe van customer relevancy is dat bedrijven met een duidelijk onderscheidend profiel het best presteren: een bedrijf kiest één aspect om op te <span class="term">domineren</span> (de beste), één om op te <span class="term">differentiëren</span> (actief gezocht door klanten), en de overige aspecten moeten <span class="term">marktconform ('op par')</span> zijn.</p>
+      <p><span class="term">Dominerend (niveau 5):</span> het bedrijf is op dit aspect de allerbeste in de markt, met 'world class'-prestaties — geen concurrent kan het evenaren. <span class="term">Differentiërend (niveau 4):</span> het bedrijf is op dit aspect een van de voorkeursleveranciers; klanten waarderen dit, al is het ondersteunend aan het dominerende aspect. <span class="term">Op par (marktconform):</span> het bedrijf presteert hier gelijk aan de rest van de markt — dit niveau staat niet stil, maar schuift mee met steeds veeleisender klanten en vernieuwende concurrenten. <span class="term">Onder par:</span> concurrenten zijn hier duidelijk beter en klantervaringen zijn ondermaats, met het risico dat klanten vertrekken. Geen bedrijf kan het zich veroorloven om op een aspect onder par te scoren.</p>
+      <p>Uit het onderzoek blijkt dat de best presterende bedrijven (ook financieel) het profiel <span class="term">5-4-3-3-3</span> hebben: dominerend op één attribuut, differentiërend op een tweede, en op par op de rest.</p>
+
+      <h4>Mythe: op alle aspecten de beste zijn is dé manier om klanten te werven en te behouden</h4>
+      <p>Het is een mythe dat een bedrijf dat overal de beste probeert te zijn, ook de beste prestaties levert (Crawford & Mathews, 2003). Voor klanten is het juist onduidelijk waarom ze uw bedrijf moeten kiezen als u overal het beste wilt zijn, en het is bovendien erg duur om in alle aspecten tegelijk te investeren. Onderzoek laat zien dat een scherp gekozen positionering tot betere resultaten leidt. De impact die u kunt hebben, verschilt wel per branche: <span class="term">Rossiter en Percy (1999)</span> laten zien dat klanten zich bij hun keuzes laten sturen door zowel de <span class="term">betrokkenheid</span> bij het product (laag, bijvoorbeeld een wasmiddel, of hoog, bijvoorbeeld een huurhuis) als de <span class="term">aankoopmotivatie</span> (negatief, zoals een geneesmiddel, of positief, zoals een vakantie). Dit bepaalt mede de speelruimte om met beleving en product te werken — bij een negatieve aankoopmotivatie zullen klanten bijvoorbeeld niet snel enthousiast worden van een 'hippe' reclamecampagne.</p>
+
+      <h4>Onderscheidend vermogen</h4>
+      <p>De sterkste bedrijven hebben een duidelijk herkenbare positionering: klanten hebben een scherp beeld van wat het bedrijf levert en hoe. Denk aan KLM (kwaliteit en service), Volvo (veiligheid) of Lidl (lage prijzen). Volgens <span class="term">Ries en Trout (1994)</span> zou elk bedrijf één woord moeten hebben waarmee klanten het herkennen. Onderscheid creëren is voor veel bedrijven moeilijk, door: het niet kiezen voor één aspect om te benadrukken (vooral bij grote aanbieders), veranderingen in de markten waarin het bedrijf actief is (bijvoorbeeld Philips, actief in meerdere sectoren), een wisselend beeld tussen wat medewerkers laten zien en wat de marketing promoot, en het willen zijn van 'de beste in alles', wat investeringen versnippert.</p>
+
+      <h4>Customer relevancy volgens medewerkers en klanten</h4>
+      <p>Een goede manier om te starten is door managers, klantcontactmedewerkers én klanten apart het customer relevancy-model voor het bedrijf te laten invullen: waar denken zij dat het bedrijf dominerend en differentiërend is? Komt dit overeen? Vaak blijken deze beelden niet goed op elkaar te passen, wat helpt om de urgentie zichtbaar te maken.</p>
+
+      <h4>Cases: retailbanken en Avéro Achmea</h4>
+      <p>Bij een onderzoek naar de <span class="term">positionering van retailbanken</span> in Nederland (met onderzoeksbureau GfK, vlak voor de financiële crisis) bleek dat de helft van de banken geen onderscheidend profiel had, zelfs niet bij hun eigen klanten — vooral bij de grote banken. Kleinere spelers zoals ASN Bank en Triodos Bank lieten wél een opvallender beeld achter, met betere scores op service en onderscheidende producten. Banken die onder par scoorden, liepen tijdens de kredietcrisis het meeste risico; kleinere banken met een scherper profiel deden het relatief goed.</p>
+      <p><span class="term">Avéro Achmea</span>, een verzekeraar die verzekeringen verkoopt via onafhankelijke intermediairs, koos er met customer relevancy voor om te domineren op <span class="term">service</span> en te differentiëren op <span class="term">beleving</span>, terwijl toegang, product en prijs op par moesten komen en blijven. Dit werd concreet gemaakt met initiatieven zoals <span class="term">Voorzie</span> (een programma om intermediairs te helpen hun bedrijf te ontwikkelen) en <span class="term">De Waarde van Advies</span> (een initiatief over de toegevoegde waarde van advies). Al deze initiatieven werden opgenomen in een customer experience roadmap, met als criterium dat elk project meer toegevoegde waarde voor intermediairs moest opleveren.</p>
+
+      <h4>Samenvatting en advies</h4>
+      <p>De vijf attributen van customer relevancy — product, prijs, service, toegang en beleving — laten zien hoe klanten hun keuzes bepalen. In één attribuut moet u het beste zijn, het tweede is differentiërend, en de rest moet op par zijn. (1) Vertaal klantbehoeften met de vijf attributen naar de focus van uw bedrijf, met concrete subattributen. (2) Bepaal de dominerende en differentiërende attributen voor een herkenbare positionering.</p>
+    `,
+    infographicHtml: `
+      <div class="info-block">
+        <h4>De vijf attributen van customer relevancy</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">1. Product</div>Het product of de dienst zelf, plus kwaliteit, eigenschappen en mogelijkheden. Bijv. "een uniek product" of "consistente kwaliteit".</div>
+          <div class="def-card"><div class="t">2. Prijs</div>Hoogte, transparantie, betrouwbaarheid en het afrekenmodel. Bijv. "scherpe tarieven" of "inzicht in de opbouw van de prijs".</div>
+          <div class="def-card"><div class="t">3. Service</div>Dienstverlening en begeleiding rond het product. Bijv. "deskundige adviseurs" of "snel opgeloste klachten".</div>
+          <div class="def-card"><div class="t">4. Toegang</div>Plaats, tijd en kanaal om product/dienst/service te verkrijgen. Bijv. "een heldere website" of "bereikbare adviseurs".</div>
+          <div class="def-card"><div class="t">5. Beleving</div>Relatie, emotie en binding met merk en bedrijf. Bijv. "een merknaam die ik vertrouw" of "als mens behandeld worden".</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>Customer relevancy-model: vijf niveaus</h4>
+        <div class="pyramid">
+          <div class="pyr-level pyr-1">5 — Dominerend<div class="pyr-split"><div>De allerbeste, 'world class'</div></div></div>
+          <div class="pyr-level pyr-2">4 — Differentiërend<div class="pyr-split"><div>Voorkeursleverancier</div></div></div>
+          <div class="pyr-level pyr-3">3 — Op par (marktconform)<div class="pyr-split"><div>Gelijk aan de markt</div></div></div>
+          <div class="pyr-level" style="width:96%; background:linear-gradient(120deg,#D8A0A8,#C97B8B);">2 / 1 — Onder par / ver onder par<div class="pyr-split"><div>Concurrenten duidelijk beter — risico dat klanten vertrekken</div></div></div>
+        </div>
+        <p class="deco" style="text-align:center;">Ideaal profiel uit onderzoek: <strong>5-4-3-3-3</strong> — dominerend op 1, differentiërend op 1, op par op de rest</p>
+      </div>
+
+      <div class="info-block">
+        <h4>Rossiter &amp; Percy (1999): betrokkenheid × aankoopmotivatie</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Hoog betrokken + negatief</div>Huisvesting, verzekeringen, nieuw industrieel product</div>
+          <div class="def-card"><div class="t">Hoog betrokken + positief</div>Vakantie, mode, auto</div>
+          <div class="def-card"><div class="t">Laag betrokken + negatief</div>Geneesmiddel, light bier, wasmiddel</div>
+          <div class="def-card"><div class="t">Laag betrokken + positief</div>Frisdrank, bier, cosmetica</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>Mogelijke invulling per niveau (voorbeelden)</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Domineert op service</div>"Zal alles doen om mij te helpen en te ondersteunen"</div>
+          <div class="def-card"><div class="t">Differentieert op beleving</div>"Is een bekende en betrouwbare partij"</div>
+          <div class="def-card"><div class="t">Op par op toegang</div>"Is gemakkelijk toegankelijk"</div>
+          <div class="def-card"><div class="t">Onder par op prijs</div>"Prijzen zijn te hoog en onduidelijk"</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>Case: Avéro Achmea</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Dominerend</div>Service — intermediair helpen als businesspartner</div>
+          <div class="def-card"><div class="t">Differentiërend</div>Beleving — vertrouwen, kennis en ervaring</div>
+          <div class="def-card"><div class="t">Op par</div>Toegang, product en prijs</div>
+        </div>
+        <p class="deco">Concepten: 'Voorzie' (bedrijfsontwikkeling voor intermediairs) en 'De Waarde van Advies'.</p>
+      </div>
+    `,
+    quiz: [
+      {q:"Waarvoor is customer relevancy (CR) volgens het boek een strategisch hulpmiddel?", opts:["Om te bepalen waar een bedrijf herkenbaar, waardevol en onderscheidend van concurrenten kan zijn.","Om alleen de kosten van marketingcampagnes zo veel mogelijk te verlagen.","Om alleen de juridische risico's van een bedrijf zo veel mogelijk te beperken."], correct:0, topic:"CR - basis", level:"onthouden"},
+      {q:"Welke vijf attributen onderscheidt customer relevancy volgens Crawford & Mathews (2003)?", opts:["Klantinzicht, klantstrategie, propositie, journey en touchpoint.","Product, prijs, service, toegang en beleving.","Prijs, plaats, promotie, personeel en proces."], correct:1, topic:"De vijf attributen", level:"onthouden"},
+      {q:"Waarom dwingt customer relevancy een bedrijf om keuzes te maken?", opts:["Omdat de wet voorschrijft dat een bedrijf maar één product mag verkopen.","Omdat klanten volgens de wet maar op één kanaal mogen worden bediend door een bedrijf.","Omdat het onmogelijk is om op alle vijf attributen tegelijk de beste te zijn."], correct:2, topic:"CR - basis", level:"begrijpen"},
+      {q:"Hoe heette het hulpmiddel oorspronkelijk, voordat het werd aangepast voor de zakelijke markt?", opts:["Business relevancy.","Market relevancy.","Consumer relevancy."], correct:2, topic:"CR - basis", level:"onthouden"},
+      {q:"Een bedrijf formuleert klantbehoeften als 'Ik wil...'-zinnen, alsof een klant ze uitspreekt. Waarom doet het boek dit?", opts:["Om iedereen in het bedrijf te dwingen zich voortdurend in de klant te verplaatsen.","Om medewerkers juist te dwingen minder vaak met klanten te praten.","Om de juridische aansprakelijkheid van het bedrijf te helpen verkleinen."], correct:0, topic:"Focus voor uw klanten", level:"toepassen"},
+      {q:"Wat valt volgens het boek onder het attribuut product?", opts:["Alleen de prijsstelling en eventuele kortingen van een product of dienst.","Het product of de dienst zelf, plus kenmerken zoals kwaliteit en mogelijkheden.","Alleen de manier waarop een product uiteindelijk bij de klant wordt bezorgd."], correct:1, topic:"Attribuut: product", level:"onthouden"},
+      {q:"Waarom neemt de invloed van het attribuut product af als producten steeds meer op elkaar gaan lijken (commodity-producten)?", opts:["Omdat klanten dan vanzelf minder willen gaan betalen voor het product.","Omdat concurrenten in dat geval wettelijk verplicht zijn om te fuseren.","Omdat het dan moeilijker wordt om via het product zelf onderscheid te creëren."], correct:2, topic:"Attribuut: product", level:"begrijpen"},
+      {q:"Een bedrijf brengt als eerste een compleet nieuw type product op de markt, dat nog door geen enkele concurrent wordt aangeboden. Via welk attribuut onderscheidt dit bedrijf zich vooral?", opts:["Vooral via het attribuut prijs, omdat een nieuw product altijd duurder geprijsd wordt.","Vooral via het attribuut product, omdat het uniek is en nog niet door concurrenten wordt geleverd.","Vooral via het attribuut toegang, omdat nieuwe producten sneller te vinden zijn online."], correct:1, topic:"Attribuut: product", level:"toepassen"},
+      {q:"Waar gaat het attribuut prijs volgens het boek over?", opts:["Alleen over de hoogte van de prijs die klanten ervoor moeten betalen.","Alleen over de korting die een bedrijf op dat moment aan klanten geeft.","Alles wat met de prijs te maken heeft, zoals hoogte, transparantie en het afrekenmodel."], correct:2, topic:"Attribuut: prijs", level:"onthouden"},
+      {q:"Waarom kopen sommige klanten een product juist omdat de prijs hoog is, zoals bij dure merkhorloges?", opts:["Omdat de hoge prijs een middel is om zich te onderscheiden van andere consumenten.","Omdat duurdere producten volgens de wet altijd van betere kwaliteit moeten zijn.","Omdat goedkope producten volgens klanten altijd sneller kapot gaan dan duurdere."], correct:0, topic:"Attribuut: prijs", level:"begrijpen"},
+      {q:"De manier waarop mobiele abonnementen worden afgerekend, veranderde van een vast bedrag naar bundels en datagebruik. Wat illustreert dit volgens het boek?", opts:["Dat aanbieders bij het bepalen van prijzen nooit rekening houden met klantgedrag.","Veranderende klantbehoeften en een veranderend aanbod op het gebied van prijs.","Dat prijs voor klanten helemaal geen relevant attribuut meer is."], correct:1, topic:"Attribuut: prijs", level:"toepassen"},
+      {q:"Wat omvat het attribuut service volgens het boek?", opts:["Alleen de garantietermijn die een bedrijf op een product biedt aan klanten.","Alleen de manier waarop klachten na aankoop van een product worden afgehandeld.","Alle dienstverlening en begeleiding die klanten krijgen als toevoeging op het basisproduct."], correct:2, topic:"Attribuut: service", level:"onthouden"},
+      {q:"Waarom is er in de dienstverlenende sector een knip tussen de 'dienst sec' en 'service'?", opts:["Omdat de dienst zelf iets anders is dan de hulp die een klant daarbij krijgt.","Omdat diensten volgens het boek wettelijk gesplitst moeten worden in twee apart facturen.","Omdat klanten volgens het boek nooit beide onderdelen tegelijk mogen afnemen."], correct:0, topic:"Attribuut: service", level:"begrijpen"},
+      {q:"Waar gaat het attribuut toegang (toegankelijkheid) volgens het boek over?", opts:["Alleen over de openingstijden van de fysieke winkels en kantoren van een bedrijf.","De manier waarop product, dienst en service kunnen worden verkregen: plaats, tijd en kanaal.","Alleen over de prijs die klanten moeten betalen voor verzending van een bestelling."], correct:1, topic:"Attribuut: toegang", level:"onthouden"},
+      {q:"Een klant wil via een app op de smartphone direct toegang hebben tot relevante informatie en transacties kunnen verrichten. Bij welk attribuut van customer relevancy hoort deze behoefte?", opts:["Toegang.","Prijs.","Product."], correct:0, topic:"Attribuut: toegang", level:"toepassen"},
+      {q:"Waar gaat het attribuut beleving volgens het boek over?", opts:["Alleen over de hoogte van de prijs die een klant ervoor moet betalen.","Alleen over de snelheid waarmee een dienst of product wordt geleverd aan de klant.","De relatie, betrokkenheid en binding van de klant met het bedrijf of merk."], correct:2, topic:"Attribuut: beleving", level:"onthouden"},
+      {q:"Waarom raakt het attribuut beleving een klant volgens het boek dieper dan wat mogelijk is met reclame?", opts:["Omdat reclame volgens de wet nooit over beleving van klanten mag gaan.","Omdat beleving alleen via persoonlijke gesprekken met de klant kan worden opgebouwd.","Omdat reclame klanten qua beleving aanspreekt, maar niet raakt in hun overtuigingen en waarden."], correct:2, topic:"Attribuut: beleving", level:"begrijpen"},
+      {q:"Sommige mensen kiezen bewust voor Adidas boven Nike, ook al zijn de voetbalschoenen vergelijkbaar. Welk attribuut speelt hier vooral een rol?", opts:["Prijs.","Beleving.","Toegang."], correct:1, topic:"Attribuut: beleving", level:"toepassen"},
+      {q:"Wat betekent het niveau 'dominerend' in het customer relevancy-model?", opts:["Het bedrijf is op dit aspect de allerbeste in de markt, met world class-prestaties.","Het bedrijf presteert op dit aspect precies gelijk aan het gemiddelde in de markt.","Het bedrijf presteert op dit aspect duidelijk onder het niveau van de markt."], correct:0, topic:"CR-model niveaus", level:"onthouden"},
+      {q:"Wat is volgens het customer relevancy-onderzoek het ideale profiel voor een bedrijf op de vijf attributen?", opts:["5-5-5-5-5, dus proberen om op alle vijf attributen tegelijk de allerbeste te zijn.","5-4-3-3-3, dus dominerend op één, differentiërend op één en op par op de rest.","3-3-3-3-3, dus op alle vijf attributen precies marktconform blijven presteren zonder verder te kiezen."], correct:1, topic:"CR-model niveaus", level:"onthouden"},
+      {q:"Waarom kan geen enkel bedrijf het zich veroorloven om op een attribuut 'onder par' te scoren?", opts:["Omdat het dan wettelijk verplicht wordt om te fuseren met een concurrent.","Omdat het attribuut in dat geval automatisch helemaal uit het model verdwijnt.","Omdat klanten dan klagen en het bedrijf het risico loopt dat klanten vertrekken."], correct:2, topic:"CR-model niveaus", level:"begrijpen"},
+      {q:"Een bedrijf presteert marktconform op drie van de vijf attributen. Wat kan het volgens het boek doen met de resterende twee attributen?", opts:["Deze twee attributen ook gewoon marktconform laten, zonder daar verder in te kiezen.","Kiezen om op één attribuut te domineren en op een tweede te differentiëren bij klanten.","Beide attributen volledig laten vallen, omdat ze dan niet meer relevant zouden zijn."], correct:1, topic:"CR-model niveaus", level:"toepassen"},
+      {q:"Wat bedoelt het boek met 'onderscheidend vermogen'?", opts:["Dat klanten een scherp beeld hebben van wat een bedrijf levert en hoe dat gebeurt.","Dat een bedrijf er altijd voor zorgt de laagste prijs in de markt te hebben.","Dat een bedrijf precies evenveel klanten heeft als zijn grootste concurrent in de markt."], correct:0, topic:"Onderscheidend vermogen", level:"onthouden"},
+      {q:"Waarom wordt het lastiger voor een bedrijf om één helder beeld bij klanten achter te laten als het met één merknaam in meerdere, veranderende markten actief is?", opts:["Omdat klanten in dat geval wettelijk recht hebben op een lagere prijs.","Omdat een bedrijf dan verplicht wordt om zijn merknaam volledig te veranderen.","Omdat het moeilijker is om één consistent beeld te bewaken in verschillende markten."], correct:2, topic:"Onderscheidend vermogen", level:"begrijpen"},
+      {q:"Een bedrijf probeert op product, prijs én service tegelijk de allerbeste te zijn. Wat is hiervan volgens het boek meestal het gevolg?", opts:["Het bedrijf krijgt vanzelf de meeste klanten binnen, omdat het overal excelleert.","De investeringen raken versnipperd, waardoor het bedrijf minder herkenbaar wordt bij klanten.","Het bedrijf hoeft dan niet meer te investeren in de overige vier attributen."], correct:1, topic:"Mythe: overal de beste zijn", level:"toepassen"},
+      {q:"Wat onderzochten Rossiter en Percy (1999) volgens het boek?", opts:["Hoe klanten zich bij hun keuzes laten sturen door betrokkenheid en aankoopmotivatie.","Hoeveel geld klanten gemiddeld besteden aan verzekeringen per jaar.","Hoeveel winkels een bedrijf minimaal nodig heeft om te groeien."], correct:0, topic:"Betrokkenheid & aankoopmotivatie", level:"onthouden"},
+      {q:"Een verzekeraar maakt een enthousiaste reclamecampagne die op een modecampagne lijkt, voor een product met een negatieve aankoopmotivatie. Wat verwacht het boek hierbij?", opts:["Klanten worden door zo'n campagne toch alsnog erg enthousiast over het product.","Klanten zullen hier niet of nauwelijks in meegaan, ondanks de campagne.","De campagne verandert de aankoopmotivatie van klanten automatisch in een positieve."], correct:1, topic:"Betrokkenheid & aankoopmotivatie", level:"toepassen"},
+      {q:"Een groep grote bedrijven in dezelfde markt blijkt bij onderzoek onder hun eigen klanten op geen enkel attribuut dominant te scoren. Wat zegt dit volgens het boek over hun onderscheidend vermogen?", opts:["Dat deze bedrijven geen onderscheidend profiel hebben, ook niet bij hun eigen klanten.","Dat deze bedrijven juist stuk voor stuk een sterk onderscheidende positionering hebben.","Dat klanten in zo'n markt daardoor nooit meer van aanbieder zouden wisselen."], correct:0, topic:"Onderscheidend vermogen", level:"toepassen"},
+      {q:"Een verzekeraar kiest ervoor om te domineren op service en te differentiëren op beleving, terwijl toegang, product en prijs op par moeten blijven. Wat is dit een voorbeeld van?", opts:["Een klantenpanel dat wordt ingezet om klanttevredenheid te meten.","Een voorbeeld van de mythe dat je overal de beste moet zijn.","Een toepassing van het customer relevancy-model om een klantstrategie te bepalen."], correct:2, topic:"CR-model niveaus", level:"toepassen"},
+      {q:"Waarom is het volgens het boek waardevol om het customer relevancy-model door managers, klantcontactmedewerkers én klanten apart te laten invullen?", opts:["Om te zien of het beeld van medewerkers en management overeenkomt met dat van klanten.","Om te bepalen welke medewerkers uiteindelijk ontslagen zouden moeten worden door het bedrijf.","Om te berekenen hoeveel bonus medewerkers aan het einde van het jaar verdienen."], correct:0, topic:"CR volgens medewerkers en klanten", level:"begrijpen"}
+    ]
+  },
+  {
+    id: "h6",
+    number: 6,
+    title: "Klantbediening inrichten met customer journeys",
+    summary: `
+      <blockquote>Steve Jobs: eenvoud bereiken is vaak harder dan complexiteit, maar het harde werk om je denken helder te krijgen loont uiteindelijk enorm.</blockquote>
+      <p>Om de klantbediening in te richten zoals bedoeld in de klantstrategie en de proposities, is de aanpak met <span class="term">customer journeys</span> de beste werkwijze. Bedrijfsprocessen zijn bedoeld voor het bedrijf; customer journeys beschrijven daarentegen de activiteiten die de klant doorloopt, gezien vanuit zijn perspectief — als een reeks contactmomenten met medewerkers, website, callcenter en winkel.</p>
+      <p>Bij een customer journey gaat het erom de gekozen positionering en proposities in de praktijk waar te maken: worden klanten op doorslaggevende momenten (de <span class="term">moments of truth</span>) écht goed bediend zoals bedoeld?</p>
+
+      <h4>Tekortkomingen in de praktijk</h4>
+      <p>Werken met customer journeys is populair, maar in de praktijk zijn er vaak tekortkomingen: de scope wordt soms te groot gemaakt (alle activiteiten of zelfs de hele organisatie in één keten), de visuele schets wordt soms te veel benadrukt terwijl de achtereenvolgende contactmomenten onvoldoende worden uitgewerkt, en soms verwordt de journey toch weer tot een procesbeschrijving waarin de interne procedure prevaleert boven wat de klant wil. Verbeterde customer journeys leiden tot het waarmaken van klantverwachtingen en het overtreffen ervan op cruciale momenten — dat levert minder afhakende klanten en meer promotors op.</p>
+
+      <h4>Customer life cycle</h4>
+      <p>Customer experience betekent dat organisaties bewust sturen op alle ervaringen die klanten met de organisatie opdoen — die ervaringen zijn niet statisch, maar een opeenvolging van indrukken (commercials, verhalen van vrienden, een telefoontje, een servicebezoek, foto's op de website, de manier waarop je een factuur ontvangt).</p>
+      <p>Een goed voorbeeld is het verschil tussen het proces zoals een bank het ziet bij een hypotheekaanvraag (identificeren klant → klantwensen inventariseren → adviesgesprek → offerte uitbrengen → offerte verwerken) en de klantketen zoals de klant die ervaart (huizen bekijken en vergelijken → inschatten wat je zou kunnen kopen → huis kopen met een makelaar → oriënteren op hypotheken → huis passeren en sleutel ophalen). De klant doorloopt heel andere stappen dan het bankproces suggereert, en de bank speelt daardoor niet automatisch goed in op de belevingswereld van de klant.</p>
+      <p>Een <span class="term">customer life cycle</span> is een klantketen waarin alle fasen zijn opgenomen die een klant met de organisatie doorloopt, vanaf het leren kennen van de organisatie tot het verlengen of beëindigen van de relatie. Dit is de eerste stap om customer journeys in beeld te brengen, en anders dan de customer journeys zelf. Omschrijf de fasen vanuit het perspectief van de klant (bijvoorbeeld 'producten vergelijken', niet 'offerte opstellen'). Er is geen generieke life cycle voor alle bedrijven; de scope moet gaan om één gelijksoortige product-marktcombinatie — een bank met zowel een retail- als een zakelijke tak heeft dus niet één gezamenlijke life cycle, omdat de klanten en activiteiten te verschillend zijn.</p>
+      <p>Bij het beschrijven van de customer life cycle verplaatsen medewerkers zich in klanten, wat een outside-in beeld van de klantbediening oplevert en helpt om verbeterpunten op te sporen (bijvoorbeeld onhandig verlopend online kopen, of wachttijden zonder contact). Zelfs bij het afscheid nemen van een klant kan de klantbediening geoptimaliseerd worden — het boek geeft als afschrikwekkend voorbeeld een kort Windows-dialoogvenster met de tekst 'De klantrelatie is beëindigd', dat feitelijk klopt maar allerminst uitnodigt om ooit nog terug te komen.</p>
+
+      <h4>Customer journeys ontwerpen</h4>
+      <p>De customer life cycle dient als 'kapstok' om concrete customer journeys te ontwerpen: verdeel de belangrijkste klantbehoeften (in 'ik wil...'-vorm, zie hoofdstuk 4) over de fasen van de keten. Bij een verzekeraar bijvoorbeeld lopen de fasen van 'bewust van risico's' via 'oriënteren', 'advies krijgen', 'afsluiten en betalen', 'advies over preventie', 'schade indienen' en 'service ontvangen' tot 'polis verlengen' — elk met eigen klantbehoeften ('ik wil weten welke risico's ik loop', 'ik wil geen papierwerk bij schade', enzovoort). Als een verzekeraar wil domineren op service en differentiëren op product, moet hij júist bij de fasen waar deze aspecten spelen (advies, schade, service) uitstekend presteren — daar komen de belangrijkste klantwensen en de gekozen positionering samen.</p>
+      <p>Een <span class="term">customer journey</span> is een samenhangende set van activiteiten die u voor klanten op een betere of nieuwere manier wilt uitvoeren. Ze start met een klantwens of -behoefte en eindigt met een andere situatie bij de klant, waarin de behoefte is ingewilligd of het probleem is opgelost. Op basis van klantprioriteiten kunt u kiezen welke customer journeys eerst verbeterd worden.</p>
+
+      <h4>Stappenplan customer journey-ontwikkeling</h4>
+      <p>Eerst brengt u de huidige journey (de 'as is'-situatie) in beeld: (1) beschrijf de activiteiten die klanten nu met de organisatie meemaken, (2) identificeer de issues tijdens deze activiteiten, (3) breng het kanaalgebruik in beeld (zie hoofdstuk 7). Daarna ontwerpt u de gewenste journey (de 'to be'-situatie) vanuit het perspectief van de klant, in vijf stappen: (1) bedenk het start- en eindpunt, (2) bedenk en ontwerp de gewenste klantervaringen en geef de journey een typerende naam, (3) beschrijf de activiteiten in een voor de klant logische volgorde, actief en vanuit de klant geformuleerd (bijvoorbeeld 'advies krijgen over productvarianten', niet 'voorlichten over productvarianten'), (4) beschrijf via welke kanalen en touchpoints klanten de activiteiten kunnen uitvoeren, en (5) bedenk wat u wilt verbeteren en innoveren, met bewuste keuzes voor <span class="term">wowmomenten</span>.</p>
+
+      <h4>Customer journeys verbeteren: acht manieren</h4>
+      <p>Zoek verbeteringen niet in eenmalige cadeautjes, maar in structurele vernieuwingen van de journey. Het boek noemt acht manieren:</p>
+      <p><span class="term">1. Ga na of alles waarde toevoegt voor klanten</span> — schrap activiteiten die alleen voor het bedrijf van waarde zijn, zoals onnodige formulieren of registratiestappen.<br>
+      <span class="term">2. Consistente klantervaringen</span> — zorg dat activiteiten consistent zijn met andere journeys, met de positionering en met elkaar (IKEA wordt genoemd als voorbeeld van een bedrijf dat dit overal, van winkel tot webshop, consequent doet).<br>
+      <span class="term">3. Creëer een onderscheidende benadering</span> — vul activiteiten in op een manier die zich onderscheidt van de concurrent, vooral op de aspecten waarmee u zich wilt onderscheiden.<br>
+      <span class="term">4. Vereenvoudig en stroomlijn de journey</span> — de digitale belastingaangifte wordt genoemd als voorbeeld: eenvoud in het vinden van informatie en in de te doorlopen stappen bleek het belangrijkst voor klanten (Spenner & Freeman, 2012).<br>
+      <span class="term">5. Verwijder barrières</span> — zoals de introductie van iDeal die het betalen bij online kopen sterk vereenvoudigde, of pick-up points voor het ophalen van bestellingen.<br>
+      <span class="term">6. Verbeter de kwaliteit van content</span> — zorg voor consistente, hoogwaardige informatie in alle kanalen.<br>
+      <span class="term">7. Lever relevante persoonlijke content</span> — personaliseer advies en online touchpoints op basis van de situatie van de klant.<br>
+      <span class="term">8. Innoveer het contact tot een wowmoment</span> — KLM wordt genoemd als voorbeeld: klanten die op sociale media aangaven met KLM te vliegen, kregen bij de gate een op hen afgestemd persoonlijk cadeautje.</p>
+
+      <h4>De invloed van medewerkers</h4>
+      <p>Een customer journey wordt waargemaakt door processen, touchpoints, activiteiten én medewerkers. Klantcontacten lopen grotendeels via medewerkers, en hun reacties, uitstraling, gedrag en houding bepalen sterk wat klanten van een bedrijf vinden — vaak op meer momenten dan je zou denken (een telefoniste die onbewust doorverbindt naar de verkeerde afdeling, een accountmanager die niet op klantcontact maar op andere KPI's wordt afgerekend, een ingehuurd callcenter dat ook concurrenten promoot). Om medewerkers een nieuwe journey goed te laten uitvoeren, is er maar één manier: hen er vroeg bij betrekken, zodat het hún vernieuwing en hún manier van werken wordt. Belangrijke ontwerpprincipes: los vragen zo veel mogelijk in het eerste contact op (<span class="term">First Time Resolution</span>), geef medewerkers de middelen en ruimte om klanten direct te helpen, en besef dat plezier en gedrevenheid van medewerkers een groot effect hebben op klanten.</p>
+
+      <h4>Case: Zappos</h4>
+      <p><span class="term">Zappos</span>, een zeer succesvolle Amerikaanse online schoenenwinkel, koos vanaf de start voor de beste online experience: geen verzendkosten, een jaar lang gratis retourneren en hoogwaardige klantenservice — met als resultaat een fanbase van zo'n 12 miljoen klanten. CEO Tony Hsieh zorgde ervoor dat deze unieke klantervaring geleverd wordt door gemotiveerde en enthousiaste medewerkers: in het callcenter wordt niet beoordeeld op snelheid, maar op de manier waarop klanten worden geholpen, ook als dat uren duurt.</p>
+
+      <h4>Samenvatting en advies</h4>
+      <p>Een customer journey is een hulpmiddel om nieuwe of verbeterde klantbediening te ontwerpen, zodat u de klantervaringen waarmaakt die u hebt beloofd: (1) maak eerst een schets van de customer life cycle met de belangrijkste klantwensen, (2) analyseer zo nodig de huidige situatie en bepaal de bottlenecks, (3) ontwerp de gewenste klantervaringen met waardevolle, consistente activiteiten, wowmomenten en enthousiaste medewerkers, en (4) bedenk verbeteringen zoals het wegnemen van barrières of een nieuwe manier van contact leggen.</p>
+    `,
+    infographicHtml: `
+      <div class="info-block">
+        <h4>Proces (bedrijf) versus klantketen (klant) — figuur 18</h4>
+        <div class="cycle">
+          <div class="cycle-step"><div class="n">1</div>Identificeren klant</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">2</div>Klantwensen inventariseren</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">3</div>Adviesgesprek</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">4</div>Offerte uitbrengen</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">5</div>Offerte verwerken</div>
+        </div>
+        <p class="deco" style="text-align:center;">↑ zo ziet de bank het (procesgericht)</p>
+        <div class="cycle">
+          <div class="cycle-step"><div class="n">1</div>Huizen bekijken en vergelijken</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">2</div>Inschatten wat je kunt kopen</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">3</div>Huis kopen met makelaar</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">4</div>Oriënteren op hypotheken</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">5</div>Huis passeren, sleutel ophalen</div>
+        </div>
+        <p class="deco" style="text-align:center;">↑ zo ervaart de klant het (klantgericht)</p>
+      </div>
+
+      <div class="info-block">
+        <h4>Voorbeeld customer life cycle (figuur 19)</h4>
+        <div class="cycle">
+          <div class="cycle-step"><div class="n">1</div>Geïnspireerd worden</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">2</div>Behoefte erkennen</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">3</div>Producten vergelijken</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">4</div>Kopen en betalen</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">5</div>Service krijgen</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">6</div>Vragen stellen</div>
+          <div class="arrow">→</div>
+          <div class="cycle-step"><div class="n">7</div>Verlengen of beëindigen</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>Voorbeeld: klantbehoeften in de klantketen van een verzekeraar (figuur 21)</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Bewust van risico's</div>"Ik wil weten welke risico's ik loop"</div>
+          <div class="def-card"><div class="t">Oriënteren</div>"Ik wil een bekende, vertrouwde partij"</div>
+          <div class="def-card"><div class="t">Advies krijgen</div>"Ik wil heldere uitleg, want ik vind dit ingewikkeld"</div>
+          <div class="def-card"><div class="t">Afsluiten en betalen</div>"Ik wil zelf bepalen wanneer ik betaal"</div>
+          <div class="def-card"><div class="t">Schade indienen</div>"Ik wil geen papierwerk"</div>
+          <div class="def-card"><div class="t">Service ontvangen</div>"Ik wil snel geholpen worden"</div>
+          <div class="def-card"><div class="t">Polis verlengen</div>"Ik wil een helder premieoverzicht"</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>Stappenplan: huidige en gewenste journey</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">As is (huidig)</div>1. Activiteiten beschrijven<br>2. Issues identificeren<br>3. Kanaalgebruik in beeld</div>
+          <div class="def-card"><div class="t">To be (gewenst)</div>1. Start- en eindpunt<br>2. Gewenste klantervaring<br>3. Activiteiten in volgorde<br>4. Kanalen en touchpoints<br>5. Verbeteren en wowmomenten</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>8 manieren om customer journeys te verbeteren</h4>
+        <div class="cycle" style="justify-content:flex-start;">
+          <div class="cycle-step"><div class="n">1</div>Waarde toevoegen?</div>
+          <div class="cycle-step"><div class="n">2</div>Consistente ervaring</div>
+          <div class="cycle-step"><div class="n">3</div>Onderscheidend</div>
+          <div class="cycle-step"><div class="n">4</div>Vereenvoudigen</div>
+          <div class="cycle-step"><div class="n">5</div>Barrières weg</div>
+          <div class="cycle-step"><div class="n">6</div>Kwaliteit content</div>
+          <div class="cycle-step"><div class="n">7</div>Persoonlijke content</div>
+          <div class="cycle-step"><div class="n">8</div>Wowmoment</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <h4>Case: Zappos</h4>
+        <div class="card-grid">
+          <div class="def-card"><div class="t">Propositie</div>Geen verzendkosten, 1 jaar gratis retour, topservice</div>
+          <div class="def-card"><div class="t">Resultaat</div>±12 miljoen trouwe klanten</div>
+          <div class="def-card"><div class="t">Cultuur</div>Callcenter beoordeeld op kwaliteit, niet snelheid</div>
+        </div>
+      </div>
+    `,
+    quiz: [
+      {q:"Wat is volgens het boek het verschil tussen bedrijfsprocessen en customer journeys?", opts:["Bedrijfsprocessen zijn eigenlijk bedoeld voor klanten, en customer journeys zijn bedoeld voor de medewerkers van het bedrijf.","Bedrijfsprocessen en customer journeys zijn volgens het boek uiteindelijk precies hetzelfde begrip, zonder enig verschil.","Bedrijfsprocessen zijn bedoeld voor het bedrijf, customer journeys beschrijven de activiteiten van de klant, vanuit zijn perspectief."], correct:2, topic:"Customer journey - basis", level:"onthouden"},
+      {q:"Wat zijn 'moments of truth' volgens het boek?", opts:["Contactmomenten die uitsluitend via de website of app van een bedrijf verlopen.","Doorslaggevende momenten waarop klanten écht goed bediend moeten worden zoals bedoeld.","Momenten waarop een bedrijf zijn jaarlijkse cijfers publiekelijk aan klanten bekendmaakt."], correct:1, topic:"Customer journey - basis", level:"onthouden"},
+      {q:"Wat is een tekortkoming die het boek noemt bij het in de praktijk toepassen van customer journeys?", opts:["Dat de scope soms te groot wordt gemaakt, van alle activiteiten of zelfs de hele organisatie.","Dat customer journeys volgens de wet verplicht zijn voor elk bedrijf met klantcontact.","Dat customer journeys in de praktijk altijd te kort en te beperkt worden opgesteld."], correct:0, topic:"Tekortkomingen in de praktijk", level:"begrijpen"},
+      {q:"Een bedrijf maakt van een customer journey toch weer een procesbeschrijving, waarbij de interne procedure prevaleert boven wat de klant wil. Welke tekortkoming illustreert dit?", opts:["Dat de visuele schets van de journey te veel benadrukt wordt.","Dat de journey te weinig kanalen voor klantcontact beschrijft.","Dat de journey toch weer een procesbeschrijving wordt in plaats van klantgericht."], correct:2, topic:"Tekortkomingen in de praktijk", level:"toepassen"},
+      {q:"Wat is een customer life cycle volgens het boek?", opts:["Een klantketen waarin alle fasen zijn opgenomen die een klant met de organisatie doorloopt.","Een enkele customer journey die inspeelt op precies één klantbehoefte.","Een overzicht van alle medewerkers die met klanten in contact staan."], correct:0, topic:"Customer life cycle", level:"onthouden"},
+      {q:"Waarom is de customer life cycle volgens het boek de eerste stap om customer journeys in beeld te brengen?", opts:["Omdat een customer life cycle wettelijk verplicht is voordat een journey mag worden getekend.","Omdat een customer journey altijd korter moet zijn dan de life cycle.","Omdat de life cycle laat zien welke fasen klanten doorlopen, als basis om journeys op te bouwen."], correct:2, topic:"Customer life cycle", level:"begrijpen"},
+      {q:"Een bank biedt zowel een retailbank als een zakelijke bank aan. Waarom hebben deze volgens het boek niet samen één customer life cycle?", opts:["Omdat de klanten en activiteiten van deze twee product-marktcombinaties te verschillend zijn.","Omdat retailbanken en zakelijke banken volgens de wet gescheiden moeten worden gehouden.","Omdat een bank maximaal één customer life cycle per vestiging mag hebben."], correct:0, topic:"Customer life cycle", level:"toepassen"},
+      {q:"In het voorbeeld van de hypotheekaanvraag (figuur 18): vanuit welk perspectief wordt het 'klantgerichte' proces van de bank benaderd?", opts:["Vanuit het perspectief van de klant die een huis zoekt.","Vanuit het perspectief van de bank en zijn eigen processen.","Vanuit het perspectief van de notaris die de akte passeert."], correct:1, topic:"Proces versus klantketen", level:"onthouden"},
+      {q:"Waarom is 'het passeren van de akte en het ophalen van de sleutel' voor de klant een leuk moment in de klantketen?", opts:["Omdat de klant daar vooral papierwerk moet invullen voor de bank.","Omdat de klant daar voor het eerst contact heeft met de bank.","Omdat de sleutel wordt overhandigd en het huis daadwerkelijk in bezit komt."], correct:2, topic:"Proces versus klantketen", level:"begrijpen"},
+      {q:"Wat toont figuur 20, het scherm dat de auteur kreeg bij het beëindigen van een spaarrekening?", opts:["Een uitnodigende brief om in de toekomst weer klant te worden.","Een korte, zakelijke tekst die meldt dat de klantrelatie is beëindigd.","Een formulier waarmee de klant zijn opzegging kan intrekken."], correct:1, topic:"Customer life cycle", level:"onthouden"},
+      {q:"Waarmee kunt u volgens het boek direct de belangrijkste klantbehoeften koppelen aan de fasen van de customer life cycle?", opts:["Met een uitgebreid financieel jaarverslag dat het bedrijf jaarlijks publiceert.","Met een volledige lijst van alle interne KPI's van de organisatie.","Met de voice of the customer, in de vorm van 'ik wil...'-uitspraken."], correct:2, topic:"Customer journeys ontwerpen", level:"onthouden"},
+      {q:"Een verzekeraar wil domineren op service en differentiëren op product. Waarom moet deze verzekeraar juist bij oriënteren, schade indienen en service ontvangen goed presteren?", opts:["Omdat dit precies de momenten zijn waarop de belangrijkste klantwensen en de gekozen positionering samenkomen.","Omdat deze fasen volgens de wet als eerste verbeterd moeten worden door verzekeraars.","Omdat dit de enige fasen zijn waarin klanten ooit contact hebben met een verzekeraar."], correct:0, topic:"Customer journeys ontwerpen", level:"toepassen"},
+      {q:"Wat is een customer journey volgens het boek?", opts:["Een interne rapportage over de behaalde omzet per klantgroep, per kwartaal opgesteld.","Een overzicht van alle vestigingen, kantoren en filialen van een organisatie.","Een samenhangende set van activiteiten die u voor klanten op een betere manier wilt uitvoeren."], correct:2, topic:"Customer journeys ontwerpen", level:"onthouden"},
+      {q:"Waarom eindigt een customer journey volgens het boek met 'een andere situatie bij de klant'?", opts:["Omdat de klantbehoefte dan is ingewilligd of het probleem van de klant is opgelost.","Omdat de klant na de journey altijd moet overstappen naar een andere aanbieder.","Omdat de journey na afloop automatisch opnieuw begint bij dezelfde klant."], correct:0, topic:"Customer journeys ontwerpen", level:"begrijpen"},
+      {q:"Welke eerste stap wordt geadviseerd bij het in beeld brengen van de huidige customer journey?", opts:["Stel meteen een compleet nieuw ontworpen journey op zonder analyse.","Vraag een extern bureau om de journey volledig te herschrijven.","Beschrijf de activiteiten die klanten nu met de organisatie meemaken."], correct:2, topic:"Stappenplan customer journey", level:"onthouden"},
+      {q:"Bij het beschrijven van de gewenste customer journey moet u activiteiten actief en vanuit de klant formuleren. Welke formulering past hierbij het best?", opts:["'Voorlichten over productvarianten', geformuleerd vanuit het perspectief van de medewerker.","'Advies krijgen over productvarianten' vanuit het perspectief van de klant.","'Productvarianten intern registreren', geformuleerd vanuit het perspectief van de administratie."], correct:1, topic:"Stappenplan customer journey", level:"toepassen"},
+      {q:"Wat is de vijfde stap bij het ontwerpen van de gewenste customer journey?", opts:["Bedenk wat u wilt verbeteren en innoveren, en kies bewust voor wowmomenten.","Bepaal alleen de prijs die voor de nieuwe dienst gevraagd gaat worden.","Verwijder de customer journey in dat geval volledig uit de roadmap van het bedrijf."], correct:0, topic:"Stappenplan customer journey", level:"onthouden"},
+      {q:"Wat is volgens het boek dé manier om customer journeys structureel te verbeteren?", opts:["Uitsluitend eenmalige cadeautjes geven aan klanten die net iets hebben gekocht.","Structurele vernieuwingen zoeken, zoals meer waarde in een contactmoment of snellere klantbediening.","Elk jaar een compleet nieuwe customer journey optuigen, los van de vorige."], correct:1, topic:"Customer journeys verbeteren", level:"onthouden"},
+      {q:"Waarom is het volgens het boek een probleem als een gemeente burgers meerdere formulieren laat invullen voordat ze een dienst kunnen afnemen?", opts:["Omdat gemeenten volgens de wet maximaal één formulier per dienst mogen gebruiken.","Omdat burgers formulieren volgens het boek altijd sneller invullen dan verwacht.","Omdat onduidelijk is of dit voor de burger is, of vooral voor de risicobeheersing van de gemeente."], correct:2, topic:"Customer journeys verbeteren", level:"begrijpen"},
+      {q:"Een klant stapt na een bankfusie over naar een andere bank omdat hij niet meer bij het kantoor om de hoek terecht kan. Welke verbetermogelijkheid uit het boek had dit kunnen voorkomen?", opts:["Consistente klantervaringen bieden in alle winkels en kantoren van de bank.","Nagaan of alle activiteiten nog daadwerkelijk waarde toevoegen voor de klant.","Relevante persoonlijke content leveren via apps op de smartphone van de klant."], correct:1, topic:"Customer journeys verbeteren", level:"toepassen"},
+      {q:"Een bedrijf zorgt dat medewerkers overal dezelfde aanspreekvorm gebruiken, dat de website dezelfde toon hanteert als de winkel, en dat producten in elk kanaal op dezelfde manier worden gepresenteerd. Welke manier om customer journeys te verbeteren illustreert dit?", opts:["Consistente klantervaringen bieden over alle kanalen en contactmomenten heen.","Barrières verwijderen die klanten tegenkomen tijdens het aankoopproces.","Relevante persoonlijke content leveren, afgestemd op de individuele klant."], correct:0, topic:"Customer journeys verbeteren", level:"toepassen"},
+      {q:"Waarom wordt de digitale belastingaangifte in het boek genoemd als voorbeeld van het vereenvoudigen van een customer journey?", opts:["Omdat klanten daardoor juist meer stappen en meer papierwerk moeten doorlopen dan vroeger.","Omdat het invullen en versturen eenvoudiger is geworden, tot een druk op de knop.","Omdat de belastingaangifte hierdoor helemaal is afgeschaft voor alle particulieren in Nederland."], correct:1, topic:"Customer journeys verbeteren", level:"begrijpen"},
+      {q:"Welke barrière werd volgens het boek definitief verbeterd door de introductie van iDeal?", opts:["Het vinden van de juiste productinformatie op een winkelwebsite.", "Het invullen van beveiligingscodes tijdens mobiel bankieren met een app.", "Het betalen van producten tijdens het online winkelen bij een webshop."], correct:2, topic:"Customer journeys verbeteren", level:"onthouden"},
+      {q:"Een luchtvaartmaatschappij zoekt via sociale media klanten op die aangeven binnenkort te gaan vliegen, en verrast hen bij de gate met een persoonlijk afgestemd cadeautje. Welke manier om customer journeys te verbeteren illustreert dit vooral?", opts:["Het contact of de interactie innoveren tot een wowmoment.","De customer journey verder vereenvoudigen en stroomlijnen voor de klant.","Barrières verwijderen die klanten tegenkomen in het aankoopproces."], correct:0, topic:"Customer journeys verbeteren", level:"toepassen"},
+      {q:"Wat bepaalt volgens het boek vooral wat klanten van een bedrijf vinden?", opts:["Alleen de officiële communicatie die het management naar buiten brengt.","De reacties, uitstraling, gedrag en houding van medewerkers in klantcontacten.","Uitsluitend de kwaliteit van de website en de app van het bedrijf."], correct:1, topic:"Invloed van medewerkers", level:"onthouden"},
+      {q:"Waarom kan een accountmanager die niet op klantcontact maar op andere KPI's wordt afgerekend, de gewenste customer journey ondermijnen?", opts:["Omdat KPI's volgens het boek altijd gunstig zijn voor de klantervaring.","Omdat accountmanagers zonder KPI's volgens het boek helemaal geen klantcontact mogen hebben.","Omdat hij dan mogelijk minder tijd aan klanten besteedt dan de journey eigenlijk vraagt."], correct:2, topic:"Invloed van medewerkers", level:"begrijpen"},
+      {q:"Wat is 'First Time Resolution' volgens het boek?", opts:["Een callcenterterm voor de mate waarin klanten meteen in het eerste contact worden geholpen.","Een marketingterm voor de eerste keer dat een klant een product koopt.","Een juridische term voor het eerste contract dat een klant ondertekent."], correct:0, topic:"Invloed van medewerkers", level:"onthouden"},
+      {q:"Om medewerkers een nieuwe customer journey goed te laten uitvoeren, adviseert het boek vooral om...", opts:["...medewerkers pas na de lancering over de nieuwe journey te informeren.","...klantcontactteams al vroeg te betrekken bij het ontwerp van de journey.","...alle communicatie met klanten volledig te automatiseren, zonder medewerkers te betrekken."], correct:1, topic:"Invloed van medewerkers", level:"toepassen"},
+      {q:"Een online winkel kiest er al vanaf de start voor om klanten geen verzendkosten te laten betalen, een lang bedenktermijn te geven en een uitstekende klantenservice te bieden. Waar draagt deze keuze vooral aan bij?", opts:["Aan het bieden van een onderscheidende klantervaring die klanten aan het bedrijf bindt.","Aan het bieden van een lagere prijs dan alle concurrenten in de markt.","Aan het opzetten van een kortere customer life cycle voor nieuwe klanten."], correct:0, topic:"Customer journeys verbeteren", level:"toepassen"},
+      {q:"Medewerkers in een callcenter worden niet beoordeeld op de snelheid waarmee ze klanten te woord staan, maar op de manier waarop klanten worden geholpen. Welk principe uit het boek verklaart waarom dit positief uitpakt voor klanten?", opts:["Het principe van First Time Resolution, waarbij snelheid altijd voorop moet staan.","Het plezier en de gedrevenheid van medewerkers hebben een groot effect op de ervaring van klanten.","Het principe dat klanten nooit mogen weten hoe een callcenter wordt beoordeeld."], correct:1, topic:"Invloed van medewerkers", level:"begrijpen"}
+    ]
+  }
+];
+
+/* ---------------- STATE ---------------- */
+let state = {
+  view: "dashboard",        // dashboard | chapter | tentamen | progress
+  chapterId: null,
+  chapterSub: "samenvatting",
+  quizSession: null,
+  history: []
+};
+
+/* ---------------- STORAGE ---------------- */
+async function loadHistory(){
+  try{
+    const r = await window.storage.get('quiz-history', false);
+    state.history = r ? JSON.parse(r.value) : [];
+  }catch(e){ state.history = []; }
+}
+async function saveHistory(){
+  try{ await window.storage.set('quiz-history', JSON.stringify(state.history), false); }
+  catch(e){ console.error('opslaan mislukt', e); }
+}
+
+/* ---------------- QUIZ ENGINE ---------------- */
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function buildQuizQuestions(chapterIds, topicsFilter){
+  let pool = [];
+  chapterIds.forEach(cid=>{
+    const ch = chapters.find(c=>c.id===cid);
+    ch.quiz.forEach((q,idx)=>{
+      if(topicsFilter && !topicsFilter.has(q.topic)) return;
+      pool.push({...q, chapterId:cid, chapterTitle:"Hoofdstuk "+ch.number, qid:cid+"-"+idx});
+    });
+  });
+  return pool;
+}
+
+function startQuiz(mode, chapterIds, topicsFilter){
+  let questions = buildQuizQuestions(chapterIds, topicsFilter);
+  if(mode==="tentamen"){
+    questions = shuffle(questions);
+  }
+  // randomize options per question, keep track of correct index
+  questions = questions.map(q=>{
+    const order = shuffle(q.opts.map((_,i)=>i));
+    const opts = order.map(i=>q.opts[i]);
+    const correct = order.indexOf(q.correct);
+    return {...q, opts, correct};
+  });
+  state.quizSession = {
+    mode, chapterIds, questions,
+    current:0,
+    answers: new Array(questions.length).fill(null), // null = unanswered
+    finished:false
+  };
+  state.view = mode==="tentamen" ? "tentamen" : "chapter";
+  if(mode!=="tentamen"){ state.chapterSub = "oefentoets"; }
+  render();
+}
+
+function selectAnswer(i){
+  const s = state.quizSession;
+  s.answers[s.current] = i;
+  render();
+}
+function goTo(idx){
+  const s = state.quizSession;
+  s.current = Math.max(0, Math.min(s.questions.length-1, idx));
+  render();
+}
+async function finishQuiz(){
+  const s = state.quizSession;
+  s.finished = true;
+  const attempt = {
+    date: new Date().toISOString(),
+    mode: s.mode,
+    chapterIds: s.chapterIds,
+    total: s.questions.length,
+    details: s.questions.map((q,i)=>({
+      topic:q.topic, chapterTitle:q.chapterTitle,
+      correct: s.answers[i]===q.correct,
+      skipped: s.answers[i]===null
+    }))
+  };
+  state.history.push(attempt);
+  await saveHistory();
+  render();
+}
+
+/* ---------------- ANALYTICS ---------------- */
+function computeTopicStats(){
+  const stats = {};
+  state.history.forEach(att=>{
+    att.details.forEach(d=>{
+      if(!stats[d.topic]) stats[d.topic]={correct:0,total:0};
+      stats[d.topic].total++;
+      if(d.correct) stats[d.topic].correct++;
+    });
+  });
+  return stats;
+}
+function computeChapterStats(){
+  const stats = {};
+  state.history.forEach(att=>{
+    att.details.forEach(d=>{
+      if(!stats[d.chapterTitle]) stats[d.chapterTitle]={correct:0,total:0};
+      stats[d.chapterTitle].total++;
+      if(d.correct) stats[d.chapterTitle].correct++;
+    });
+  });
+  return stats;
+}
+
+/* ---------------- RENDER: NAV ---------------- */
+function renderNav(){
+  const nav = document.getElementById('nav');
+  let html = `<div class="nav-item ${state.view==='dashboard'?'active':''}" onclick="goDashboard()">🏠 Dashboard</div>`;
+  chapters.forEach(ch=>{
+    const isOpen = state.view==='chapter' && state.chapterId===ch.id;
+    html += `<div class="nav-item ${isOpen?'active':''}" onclick="openChapter('${ch.id}','samenvatting')">📖 Hoofdstuk ${ch.number}</div>`;
+    if(isOpen){
+      html += `<div class="nav-sub">
+        <div class="nav-item ${state.chapterSub==='samenvatting'?'active':''}" onclick="openChapter('${ch.id}','samenvatting')">Samenvatting</div>
+        <div class="nav-item ${state.chapterSub==='infographic'?'active':''}" onclick="openChapter('${ch.id}','infographic')">Infographic</div>
+        <div class="nav-item ${state.chapterSub==='oefentoets'?'active':''}" onclick="openChapter('${ch.id}','oefentoets')">Oefentoets</div>
+      </div>`;
+    }
+  });
+  html += `<div class="nav-item ${state.view==='tentamen'?'active':''}" onclick="goTentamenSetup()">📝 Tentamen</div>`;
+  html += `<div class="nav-item ${state.view==='progress'?'active':''}" onclick="goProgress()">🌸 Mijn voortgang</div>`;
+  nav.innerHTML = html;
+}
+
+function goDashboard(){ state.view="dashboard"; render(); }
+function openChapter(id, sub){ state.view="chapter"; state.chapterId=id; state.chapterSub=sub; state.quizSession=null; render(); }
+function goTentamenSetup(){ state.view="tentamen"; state.quizSession=null; render(); }
+function goProgress(){ state.view="progress"; render(); }
+
+/* ---------------- RENDER: MAIN ---------------- */
+function render(){
+  renderNav();
+  const main = document.getElementById('main');
+  if(state.view==='dashboard') main.innerHTML = renderDashboard();
+  else if(state.view==='chapter') main.innerHTML = renderChapter();
+  else if(state.view==='tentamen') main.innerHTML = renderTentamen();
+  else if(state.view==='progress') main.innerHTML = renderProgress();
+}
+
+function renderDashboard(){
+  const totalAttempts = state.history.length;
+  const totalQ = state.history.reduce((a,h)=>a+h.total,0);
+  const totalCorrect = state.history.reduce((a,h)=>a+h.details.filter(d=>d.correct).length,0);
+  const avg = totalQ ? Math.round(100*totalCorrect/totalQ) : null;
+  let tiles = chapters.map(ch=>`
+    <div class="chapter-tile" onclick="openChapter('${ch.id}','samenvatting')">
+      <div><strong>Hoofdstuk ${ch.number}</strong><br><span style="font-size:0.85em; color:var(--ink-soft)">${ch.title}</span></div>
+      <div>→</div>
+    </div>`).join('');
+  return `
+    <h1>Welkom terug ✿</h1>
+    <p class="empty-note" style="margin-bottom:20px;">Een rustige plek om hoofdstuk voor hoofdstuk te leren voor je tentamen.</p>
+    <div class="grid" style="margin-bottom:24px;">
+      <div class="card stat"><div class="num">${chapters.length}</div><div class="label">hoofdstukken toegevoegd</div></div>
+      <div class="card stat"><div class="num">${avg===null?'—':avg+'%'}</div><div class="label">gemiddelde score tot nu toe</div></div>
+    </div>
+    <div class="card">
+      <h3>Hoofdstukken</h3>
+      ${tiles}
+    </div>
+  `;
+}
+
+function renderChapter(){
+  const ch = chapters.find(c=>c.id===state.chapterId);
+  if(state.chapterSub==='samenvatting'){
+    return `<div class="card summary"><h2>Hoofdstuk ${ch.number} — Samenvatting</h2>${ch.summary}</div>`;
+  }
+  if(state.chapterSub==='infographic'){
+    return `<div class="card"><h2>Hoofdstuk ${ch.number} — Infographic</h2>${ch.infographicHtml}</div>`;
+  }
+  if(state.chapterSub==='oefentoets'){
+    if(!state.quizSession || state.quizSession.mode!=='chapter' || state.quizSession.chapterIds[0]!==ch.id){
+      return `<div class="card">
+        <h2>Oefentoets — Hoofdstuk ${ch.number}</h2>
+        <p>${ch.quiz.length} meerkeuzevragen over dit hoofdstuk, met een mix van onthouden, begrijpen en toepassen.</p>
+        <button onclick="startQuiz('chapter', ['${ch.id}'])">Start oefentoets</button>
+      </div>`;
+    }
+    return renderQuizRunner();
+  }
+}
+
+function escapeJs(str){ return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function initTentamenTopics(){
+  if(!state.tentamenTopics){
+    state.tentamenTopics = new Set();
+    chapters.forEach(ch=> ch.quiz.forEach(q=> state.tentamenTopics.add(q.topic)));
+  }
+}
+function toggleTentamenTopic(topic){
+  initTentamenTopics();
+  if(state.tentamenTopics.has(topic)) state.tentamenTopics.delete(topic);
+  else state.tentamenTopics.add(topic);
+  render();
+}
+function toggleTentamenChapterAll(chapterId, select){
+  initTentamenTopics();
+  const ch = chapters.find(c=>c.id===chapterId);
+  const topics = [...new Set(ch.quiz.map(q=>q.topic))];
+  topics.forEach(t=> select ? state.tentamenTopics.add(t) : state.tentamenTopics.delete(t));
+  render();
+}
+function selectAllTentamenTopics(select){
+  state.tentamenTopics = new Set();
+  if(select){ chapters.forEach(ch=> ch.quiz.forEach(q=> state.tentamenTopics.add(q.topic))); }
+  render();
+}
+function countQuestionsForTopics(topicsSet){
+  let count=0;
+  chapters.forEach(ch=> ch.quiz.forEach(q=>{ if(topicsSet.has(q.topic)) count++; }));
+  return count;
+}
+function startTentamenWithTopics(){
+  initTentamenTopics();
+  const chapterIds = chapters.map(c=>c.id);
+  startQuiz('tentamen', chapterIds, state.tentamenTopics);
+}
+
+function renderTentamen(){
+  if(!state.quizSession){
+    initTentamenTopics();
+    const chapterBlocks = chapters.map(ch=>{
+      const topics = [...new Set(ch.quiz.map(q=>q.topic))];
+      const topicRows = topics.map(t=>{
+        const checked = state.tentamenTopics.has(t);
+        return `<label style="display:flex; align-items:center; gap:8px; padding:5px 0; font-size:0.88em; cursor:pointer;">
+          <input type="checkbox" ${checked?'checked':''} onchange="toggleTentamenTopic('${escapeJs(t)}')"> ${t}
+        </label>`;
+      }).join('');
+      return `<div style="margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px dashed var(--lilac-deep); padding-bottom:4px; margin-bottom:4px;">
+          <strong style="color:var(--rose-dark);">Hoofdstuk ${ch.number}</strong>
+          <span style="font-size:0.78em;">
+            <a href="#" onclick="toggleTentamenChapterAll('${ch.id}',true);return false;" style="color:var(--rose-dark); text-decoration:underline;">alles</a> ·
+            <a href="#" onclick="toggleTentamenChapterAll('${ch.id}',false);return false;" style="color:var(--rose-dark); text-decoration:underline;">geen</a>
+          </span>
+        </div>
+        ${topicRows}
+      </div>`;
+    }).join('');
+    const totalSelected = countQuestionsForTopics(state.tentamenTopics);
+    return `<div class="card">
+      <h2>Tentamenmodus</h2>
+      <p>Vink de onderwerpen aan waarover je vragen wilt oefenen — laat alles aangevinkt voor een volledig tentamen. Vragen en antwoordvolgorde worden gerandomiseerd.</p>
+      <div style="margin-bottom:14px;">
+        <button class="secondary" onclick="selectAllTentamenTopics(true)">Alles selecteren</button>
+        <button class="secondary" onclick="selectAllTentamenTopics(false)">Alles deselecteren</button>
+      </div>
+      ${chapterBlocks}
+      <button onclick="startTentamenWithTopics()" ${totalSelected===0?'disabled':''}>Start tentamen (${totalSelected} vragen)</button>
+      ${totalSelected===0 ? '<p class="empty-note" style="margin-top:10px;">Selecteer minimaal één onderwerp.</p>' : ''}
+    </div>`;
+  }
+  return renderQuizRunner();
+}
+
+function renderQuizRunner(){
+  const s = state.quizSession;
+  if(s.finished) return renderResults();
+  const q = s.questions[s.current];
+  const answered = s.answers[s.current];
+  const pct = Math.round(((s.current+1)/s.questions.length)*100);
+  let optsHtml = q.opts.map((opt,i)=>{
+    let cls = 'option';
+    if(answered===i) cls += ' selected';
+    return `<div class="${cls}" onclick="selectAnswer(${i})">${String.fromCharCode(65+i)}. ${opt}</div>`;
+  }).join('');
+  let qmap = s.questions.map((_,i)=>{
+    let cls = i===s.current?'current':'';
+    if(s.answers[i]!==null) cls += ' answered';
+    return `<span class="${cls}" onclick="goTo(${i})">${i+1}</span>`;
+  }).join('');
+  const allAnswered = s.answers.every(a=>a!==null);
+  return `
+    <div class="card">
+      <div class="progressbar"><div style="width:${pct}%"></div></div>
+      <div class="qcounter">Vraag ${s.current+1} van ${s.questions.length} ${s.mode==='tentamen'?'· '+q.chapterTitle:''}</div>
+      <h3>${q.q}</h3>
+      ${optsHtml}
+      <div class="qmap">${qmap}</div>
+      <div class="qnav">
+        <button class="secondary" onclick="goTo(${s.current-1})" ${s.current===0?'disabled':''}>← Terug</button>
+        ${s.current < s.questions.length-1
+          ? `<button onclick="goTo(${s.current+1})">Volgende →</button>`
+          : `<button onclick="finishQuiz()" ${!allAnswered?'':''}>Toets inleveren</button>`}
+      </div>
+      ${!allAnswered && s.current===s.questions.length-1 ? '<p class="empty-note" style="margin-top:10px;">Je kunt ook onbeantwoorde vragen inleveren — die tellen als overgeslagen.</p>' : ''}
+    </div>
+  `;
+}
+
+function renderResults(){
+  const s = state.quizSession;
+  const total = s.questions.length;
+  let correct=0, wrong=0, skipped=0;
+  const perChapter = {};
+  const perTopic = {};
+  s.questions.forEach((q,i)=>{
+    const a = s.answers[i];
+    const isCorrect = a===q.correct;
+    if(a===null) skipped++;
+    else if(isCorrect) correct++;
+    else wrong++;
+    if(!perChapter[q.chapterTitle]) perChapter[q.chapterTitle]={c:0,t:0};
+    perChapter[q.chapterTitle].t++;
+    if(isCorrect) perChapter[q.chapterTitle].c++;
+    if(!perTopic[q.topic]) perTopic[q.topic]={c:0,t:0};
+    perTopic[q.topic].t++;
+    if(isCorrect) perTopic[q.topic].c++;
+  });
+  const pct = Math.round(100*correct/total);
+
+  let chapterHtml = Object.entries(perChapter).map(([name,v])=>{
+    const p = Math.round(100*v.c/v.t);
+    return `<div class="topic-bar-row"><div class="name">${name}</div><div class="topic-bar-track"><div class="topic-bar-fill" style="width:${p}%; background:${p>=70?'var(--green-ok)':p>=40?'var(--gold)':'var(--red-no)'}"></div></div><div>${p}%</div></div>`;
+  }).join('');
+
+  let weakTopics = Object.entries(perTopic).filter(([_,v])=>v.c/v.t < 0.6);
+  let topicFeedback = weakTopics.length ? weakTopics.map(([name,v])=>{
+    const p = Math.round(100*v.c/v.t);
+    return `<p>Je maakt relatief veel fouten bij <span class="term">${name}</span> (${p}% goed). Bekijk dit onderwerp opnieuw in de samenvatting of infographic.</p>`;
+  }).join('') : `<p class="empty-note">Geen duidelijke zwakke onderwerpen bij deze toets — goed gedaan!</p>`;
+
+  let reviewHtml = s.questions.map((q,i)=>{
+    const a = s.answers[i];
+    if(a===q.correct) return '';
+    const cls = a===null?'skipped':'wrong';
+    return `<div class="review-item ${cls}">
+      <strong>${q.q}</strong><br>
+      <span style="font-size:0.88em;">Jouw antwoord: ${a===null?'<em>overgeslagen</em>':q.opts[a]}</span><br>
+      <span style="font-size:0.88em; color:var(--green-ok);">Juiste antwoord: ${q.opts[q.correct]}</span><br>
+      <span style="font-size:0.8em; color:var(--ink-soft);">${q.chapterTitle} · ${q.topic}</span>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="card result-score">
+      <div class="big">${pct}%</div>
+      <p><span class="pill rose">${correct} goed</span><span class="pill" style="background:#F1D6D6;color:#8A3A3A;">${wrong} fout</span><span class="pill gold">${skipped} overgeslagen</span></p>
+    </div>
+    <div class="card">
+      <h3>Analyse per hoofdstuk</h3>
+      ${chapterHtml}
+    </div>
+    <div class="card">
+      <h3>Feedback per onderwerp</h3>
+      ${topicFeedback}
+    </div>
+    ${reviewHtml ? `<div class="card"><h3>Nabespreking van foute/overgeslagen vragen</h3>${reviewHtml}</div>` : ''}
+    <button onclick="restartFromResults()">Terug naar overzicht</button>
+  `;
+}
+
+function restartFromResults(){
+  const mode = state.quizSession.mode;
+  state.quizSession = null;
+  state.view = mode==='tentamen' ? 'tentamen' : 'chapter';
+  render();
+}
+
+function renderProgress(){
+  const topicStats = computeTopicStats();
+  const chapterStats = computeChapterStats();
+  if(state.history.length===0){
+    return `<div class="card"><h2>Mijn voortgang 🌸</h2><p class="empty-note">Nog geen toetsen gemaakt. Doe een oefentoets of tentamen om je voortgang hier te zien.</p></div>`;
+  }
+  const entries = Object.entries(topicStats).map(([name,v])=>({name, pct: v.c/v.t, ...v}));
+  const strong = entries.filter(e=>e.pct>=0.75).sort((a,b)=>b.pct-a.pct);
+  const practice = entries.filter(e=>e.pct>=0.4 && e.pct<0.75).sort((a,b)=>a.pct-b.pct);
+  const priority = entries.filter(e=>e.pct<0.4).sort((a,b)=>a.pct-b.pct);
+
+  function list(arr, empty){
+    if(!arr.length) return `<p class="empty-note">${empty}</p>`;
+    return arr.map(e=>`<div class="topic-bar-row"><div class="name">${e.name}</div><div class="topic-bar-track"><div class="topic-bar-fill" style="width:${Math.round(e.pct*100)}%; background:${e.pct>=0.75?'var(--green-ok)':e.pct>=0.4?'var(--gold)':'var(--red-no)'}"></div></div><div>${Math.round(e.pct*100)}%</div></div>`).join('');
+  }
+
+  let chapterHistoryRows = Object.entries(chapterStats).map(([name,v])=>{
+    const p = Math.round(100*v.c/v.t);
+    return `<div class="topic-bar-row"><div class="name">${name}</div><div class="topic-bar-track"><div class="topic-bar-fill" style="width:${p}%; background:${p>=70?'var(--green-ok)':p>=40?'var(--gold)':'var(--red-no)'}"></div></div><div>${p}%</div></div>`;
+  }).join('');
+
+  let scoreHistory = state.history.slice().reverse().slice(0,10).map(h=>{
+    const c = h.details.filter(d=>d.correct).length;
+    const pct = Math.round(100*c/h.total);
+    const d = new Date(h.date);
+    return `<div class="topic-bar-row"><div class="name">${d.toLocaleDateString('nl-NL')} · ${h.mode==='tentamen'?'Tentamen':'Oefentoets'}</div><div class="topic-bar-track"><div class="topic-bar-fill" style="width:${pct}%; background:var(--lilac-deep)"></div></div><div>${pct}%</div></div>`;
+  }).join('');
+
+  return `
+    <div class="card"><h2>Mijn voortgang 🌸</h2>
+      <p class="empty-note">${state.history.length} toets(en) gemaakt in totaal.</p>
+    </div>
+    <div class="card"><h3>Score per hoofdstuk</h3>${chapterHistoryRows}</div>
+    <div class="card"><h3>Recente toetsscores</h3>${scoreHistory}</div>
+    <div class="card"><h3>✿ Sterk</h3>${list(strong,'Nog geen onderwerpen die duidelijk sterk zijn.')}</div>
+    <div class="card"><h3>📖 Nog oefenen</h3>${list(practice,'Geen onderwerpen die extra oefening nodig hebben.')}</div>
+    <div class="card"><h3>⚠️ Prioriteit</h3>${list(priority,'Geen onderwerpen met prioriteit — goed bezig!')}</div>
+  `;
+}
+
+/* ---------------- INIT ---------------- */
+(async function init(){
+  await loadHistory();
+  render();
+})();
+</script>
+</body>
+</html>
